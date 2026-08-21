@@ -47,6 +47,15 @@ type Site = {
       readonly evento: string;
     }[];
   };
+  readonly nosotros: {
+    readonly eyebrow: string;
+    readonly titulo: readonly [string, string];
+    readonly parrafo1: string;
+    readonly parrafo2: string;
+    /** Fragmento exacto de `parrafo2` que va resaltado. */
+    readonly resalte: string;
+    readonly credencial: string;
+  };
   readonly nav: readonly { readonly id: string; readonly label: string; readonly href: string }[];
   readonly cta: { readonly label: string; readonly href: string };
   readonly contact: {
@@ -121,6 +130,30 @@ export const site = {
   },
 
   /**
+   * Copy de "Quiénes somos".
+   *
+   * Voz de marca en plural: habla de lo que hacemos y de lo que pensamos,
+   * nunca de cuántos somos. Aquí no va ninguna cifra verificable —tamaño de
+   * equipo, número de clientes, años concretos— ni nombres de empresas.
+   */
+  nosotros: {
+    eyebrow: "Quiénes somos",
+    // Dos líneas: la segunda es la afirmación que carga el peso visual.
+    titulo: [
+      "Tu negocio ya sabe cómo trabajar.",
+      "El software debería adaptarse a eso.",
+    ],
+    parrafo1:
+      "La mayoría de los sistemas del mercado te piden lo contrario: cambia tu forma de operar para que quepa en el programa.",
+    parrafo2:
+      "En YiSoft lo hacemos al revés. Estudiamos cómo funciona tu negocio y construimos el sistema alrededor — gestión de inventario, clientes, ventas, o la landing que te dé a conocer.",
+    // Único resalte de la sección: si se resaltan dos cosas, no se resaltó ninguna.
+    resalte: "lo hacemos al revés",
+    credencial:
+      "Años construyendo sistemas de gestión interna para el sector bancario, y landings para negocios que necesitan darse a conocer.",
+  },
+
+  /**
    * Enlaces del nav principal. Los consumen el nav de escritorio, el menú
    * móvil y el scroll-spy.
    */
@@ -150,12 +183,12 @@ export type NavLink = (typeof site.nav)[number];
 /** Secciones de la landing, en orden. Usadas por page.tsx. */
 export const sections = [
   { id: "inicio", label: "Inicio" },
+  { id: "nosotros", label: "Quiénes somos" },
   { id: "problema", label: "Problema" },
   { id: "solucion", label: "Solución" },
   { id: "servicios", label: "Servicios" },
   { id: "proceso", label: "Proceso" },
   { id: "casos", label: "Casos" },
-  { id: "sobre-mi", label: "Sobre mí" },
   { id: "contacto", label: "Contacto" },
 ] as const;
 
