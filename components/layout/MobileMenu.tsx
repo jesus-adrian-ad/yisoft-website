@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { navLinks, ctaLink } from "@/lib/site";
+import { site } from "@/lib/site";
 import { cn } from "@/lib/cn";
 import {
   useAnimacionesCompletas,
@@ -110,7 +110,7 @@ export function MobileMenu({ id, abierto, activo, onCerrar, onNavegar }: MobileM
               }}
               className="flex flex-col items-center gap-1 xs:gap-2"
             >
-              {navLinks.map((link) => (
+              {site.nav.map((link) => (
                 <motion.li
                   key={link.id}
                   variants={{
@@ -149,21 +149,21 @@ export function MobileMenu({ id, abierto, activo, onCerrar, onNavegar }: MobileM
               animate={{ opacity: 1, y: 0 }}
               transition={{
                 duration: duracion,
-                delay: menosMovimiento ? 0 : stagger * (navLinks.length + 1),
+                delay: menosMovimiento ? 0 : stagger * (site.nav.length + 1),
                 ease: [0.22, 1, 0.36, 1],
               }}
               className="mt-6 flex flex-col items-center gap-4 xs:mt-10 xs:gap-6"
             >
               <Button
-                href={ctaLink.href}
+                href={site.cta.href}
                 tamano="lg"
                 fluido
                 onClick={(event) => {
                   event.preventDefault();
-                  onNavegar(ctaLink.href);
+                  onNavegar(site.cta.href);
                 }}
               >
-                {ctaLink.label}
+                {site.cta.label}
               </Button>
 
               <div className="flex items-center gap-3">

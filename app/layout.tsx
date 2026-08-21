@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "./globals.css";
-import { siteConfig } from "@/lib/site";
+import { site } from "@/lib/site";
 import Header from "@/components/layout/Header";
 import JsonLd from "@/components/layout/JsonLd";
 import LenisProvider from "@/components/layout/LenisProvider";
@@ -27,41 +27,47 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(site.url),
+
+  /* SEO: lo que ve Google. El title NO lleva sufijo de marca — Google lo
+     añade solo a partir de openGraph.siteName. */
   title: {
-    default: siteConfig.title,
-    template: `%s | ${siteConfig.name}`,
+    default: site.seo.title,
+    template: site.seo.titleTemplate,
   },
-  description: siteConfig.description,
-  keywords: [...siteConfig.keywords],
-  authors: [{ name: siteConfig.author, url: siteConfig.url }],
-  creator: siteConfig.author,
-  publisher: siteConfig.name,
-  applicationName: siteConfig.name,
+  description: site.seo.description,
+  keywords: [...site.seo.keywords],
+  authors: [{ name: site.author, url: site.url }],
+  creator: site.author,
+  publisher: site.name,
+  applicationName: site.name,
   alternates: {
     canonical: "/",
   },
+
+  /* Open Graph: textos propios, deliberadamente distintos a los de SEO.
+     Heredarlos hacía que la vista previa se leyera como una ficha técnica. */
   openGraph: {
     type: "website",
-    locale: siteConfig.locale,
-    siteName: siteConfig.name,
-    url: siteConfig.url,
-    title: siteConfig.title,
-    description: siteConfig.description,
+    locale: site.locale,
+    siteName: site.name,
+    url: site.url,
+    title: site.social.ogTitle,
+    description: site.social.ogDescription,
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: `${siteConfig.name} — ${siteConfig.slogan}`,
+        alt: site.social.ogTitle,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.title,
-    description: siteConfig.description,
-    creator: siteConfig.author,
+    title: site.social.ogTitle,
+    description: site.social.ogDescription,
+    creator: site.author,
     images: ["/opengraph-image"],
   },
   robots: {
@@ -100,7 +106,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="es-MX"
+      lang={site.lang}
       className={`${montserrat.variable} ${inter.variable}`}
       suppressHydrationWarning
     >

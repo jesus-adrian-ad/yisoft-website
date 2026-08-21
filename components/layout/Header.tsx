@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ctaLink, logo, navLinks } from "@/lib/site";
+import { logo, site } from "@/lib/site";
 import { cn } from "@/lib/cn";
 import { irASeccion } from "@/lib/navegacion";
 import { useLenis } from "@/components/layout/LenisProvider";
@@ -23,7 +23,7 @@ const SIEMPRE_VISIBLE = 100;
 const DELTA_MINIMO = 8; // evita el temblor con micro-scrolls
 
 const ID_MENU = "menu-movil-yisoft";
-const IDS_SECCIONES = navLinks.map((l) => l.id);
+const IDS_SECCIONES = site.nav.map((l) => l.id);
 
 export function Header() {
   const lenis = useLenis();
@@ -171,7 +171,7 @@ export function Header() {
           {/* Nav de escritorio */}
           <nav aria-label="Principal" className="hidden lg:block">
             <ul className="flex items-center gap-0 xl:gap-2 3xl:gap-4">
-              {navLinks.map((link) => (
+              {site.nav.map((link) => (
                 <li key={link.id}>
                   <NavLink
                     href={link.href}
@@ -193,15 +193,15 @@ export function Header() {
               <ThemeToggle />
 
               <MagneticButton
-                href={ctaLink.href}
+                href={site.cta.href}
                 tamano="sm"
                 className="xl:text-body"
                 onClick={(event) => {
                   event.preventDefault();
-                  navegar(ctaLink.href);
+                  navegar(site.cta.href);
                 }}
               >
-                {ctaLink.label}
+                {site.cta.label}
               </MagneticButton>
             </div>
 

@@ -1,4 +1,4 @@
-import { siteConfig } from "@/lib/site";
+import { site } from "@/lib/site";
 
 /** Escapa `<` para que el JSON nunca pueda cerrar la etiqueta <script>. */
 function serializar(data: unknown): string {
@@ -8,26 +8,26 @@ function serializar(data: unknown): string {
 const professionalService = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
-  "@id": `${siteConfig.url}/#organizacion`,
-  name: siteConfig.name,
-  description:
-    "Desarrollo de sistemas de gestión, APIs, automatización e integración de datos.",
-  url: siteConfig.url,
-  logo: siteConfig.logo,
-  image: siteConfig.ogImage,
-  slogan: siteConfig.slogan,
-  areaServed: siteConfig.areaServed.map((name) => ({
+  "@id": `${site.url}/#organizacion`,
+  name: site.name,
+  description: site.seo.description,
+  url: site.url,
+  logo: site.logo,
+  image: site.ogImage,
+  slogan: site.slogan,
+  areaServed: site.areaServed.map((name) => ({
     "@type": "Place",
     name,
   })),
   founder: {
     "@type": "Person",
-    name: siteConfig.author,
-    jobTitle: siteConfig.authorRole,
+    name: site.author,
+    jobTitle: site.authorRole,
   },
-  serviceType: [...siteConfig.serviceType],
-  email: siteConfig.contact.email,
-  inLanguage: "es-MX",
+  serviceType: [...site.serviceType],
+  // Solo se publica el contacto cuando existe: un `email: ""` es dato inválido.
+  ...(site.contact.email ? { email: site.contact.email } : {}),
+  inLanguage: site.lang,
 };
 
 export function JsonLd() {
