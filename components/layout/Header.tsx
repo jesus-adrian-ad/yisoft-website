@@ -145,7 +145,7 @@ export function Header() {
               event.preventDefault();
               navegar("#inicio");
             }}
-            className="relative block h-8 w-[110px] shrink-0 lg:h-10 lg:w-[137px]"
+            className="relative block h-7 w-[96px] shrink-0 xs:h-8 xs:w-[110px] lg:h-10 lg:w-[137px]"
           >
             <Image
               src={logo.claro}
@@ -153,7 +153,7 @@ export function Header() {
               width={logo.width}
               height={logo.height}
               priority
-              sizes="(min-width: 1024px) 137px, 110px"
+              sizes="(min-width: 1024px) 137px, (min-width: 360px) 110px, 96px"
               className="h-full w-full object-contain object-left dark:hidden"
             />
             <Image
@@ -163,7 +163,7 @@ export function Header() {
               width={logo.width}
               height={logo.height}
               priority
-              sizes="(min-width: 1024px) 137px, 110px"
+              sizes="(min-width: 1024px) 137px, (min-width: 360px) 110px, 96px"
               className="hidden h-full w-full object-contain object-left dark:block"
             />
           </a>
@@ -185,27 +185,34 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2 lg:gap-3">
-            <ThemeToggle className="hidden lg:inline-flex" />
+            {/* Los controles de escritorio se ocultan desde este contenedor,
+                NO con `hidden` en cada componente: sus clases base ya traen
+                `inline-flex`, que gana en la hoja de estilos y los dejaría
+                visibles en móvil (duplicando el toggle con el del menú). */}
+            <div className="hidden items-center gap-2 lg:flex lg:gap-3">
+              <ThemeToggle />
 
-            <MagneticButton
-              href={ctaLink.href}
-              tamano="sm"
-              className="hidden lg:inline-flex xl:text-body"
-              onClick={(event) => {
-                event.preventDefault();
-                navegar(ctaLink.href);
-              }}
-            >
-              {ctaLink.label}
-            </MagneticButton>
+              <MagneticButton
+                href={ctaLink.href}
+                tamano="sm"
+                className="xl:text-body"
+                onClick={(event) => {
+                  event.preventDefault();
+                  navegar(ctaLink.href);
+                }}
+              >
+                {ctaLink.label}
+              </MagneticButton>
+            </div>
 
-            <Hamburger
-              ref={hamburguesaRef}
-              abierto={abierto}
-              controla={ID_MENU}
-              onClick={() => (abierto ? cerrarMenu() : setAbierto(true))}
-              className="lg:hidden"
-            />
+            <div className="lg:hidden">
+              <Hamburger
+                ref={hamburguesaRef}
+                abierto={abierto}
+                controla={ID_MENU}
+                onClick={() => (abierto ? cerrarMenu() : setAbierto(true))}
+              />
+            </div>
           </div>
         </Container>
       </header>

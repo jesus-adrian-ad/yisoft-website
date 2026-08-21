@@ -40,7 +40,10 @@
    todavía no se use: son la fuente de verdad del sistema de diseño. */
 @theme static {
   /* --- Breakpoints extra (los de Tailwind se conservan:
-         sm 640 · md 768 · lg 1024 · xl 1280 · 2xl 1536) --- */
+         sm 640 · md 768 · lg 1024 · xl 1280 · 2xl 1536) ---
+     `xs` separa los teléfonos muy angostos (320-359px, tipo iPhone SE) del
+     resto: ahí el ancho base va más apretado y se relaja a partir de 360. */
+  --breakpoint-xs: 22.5rem; /* 360px */
   --breakpoint-3xl: 120rem; /* 1920px */
   --breakpoint-4xl: 160rem; /* 2560px */
 

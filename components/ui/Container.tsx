@@ -27,7 +27,9 @@ export function Container({
   return (
     <Tag
       className={cn(
-        "mx-auto w-full px-5 md:px-8",
+        // A 320px, 1.25rem de padding deja el contenido demasiado justo:
+        // se baja a 1rem y se recupera desde 360px.
+        "mx-auto w-full px-4 xs:px-5 md:px-8",
         narrow ? "max-w-yi-narrow" : anchos,
         className,
       )}

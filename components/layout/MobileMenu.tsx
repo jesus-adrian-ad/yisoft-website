@@ -97,7 +97,10 @@ export function MobileMenu({ id, abierto, activo, onCerrar, onNavegar }: MobileM
             "fijo-seguro-top",
           )}
         >
-          <div className="flex min-h-dvh flex-col justify-between px-5 pt-24 pb-[max(2rem,env(safe-area-inset-bottom,0px))]">
+          {/* A 320x568 (iPhone SE) el menú entero tiene que caber sin scroll:
+              menos aire arriba, enlaces más bajos y tipografía un escalón
+              menor. Desde 360px recupera el tamaño completo. */}
+          <div className="flex min-h-dvh flex-col justify-between px-4 pt-20 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))] xs:px-5 xs:pt-24 xs:pb-[max(2rem,env(safe-area-inset-bottom,0px))]">
             <motion.ul
               initial="oculto"
               animate="visible"
@@ -105,7 +108,7 @@ export function MobileMenu({ id, abierto, activo, onCerrar, onNavegar }: MobileM
                 visible: { transition: { staggerChildren: stagger, delayChildren: stagger } },
                 oculto: {},
               }}
-              className="flex flex-col items-center gap-2"
+              className="flex flex-col items-center gap-1 xs:gap-2"
             >
               {navLinks.map((link) => (
                 <motion.li
@@ -126,8 +129,9 @@ export function MobileMenu({ id, abierto, activo, onCerrar, onNavegar }: MobileM
                       onNavegar(link.href);
                     }}
                     className={cn(
-                      "flex min-h-14 w-full items-center justify-center rounded-boton px-4",
-                      "font-display text-h2 font-extrabold tracking-tight",
+                      // min-h-12 = 48px: sigue por encima del mínimo táctil de 44.
+                      "flex min-h-12 w-full items-center justify-center rounded-boton px-4 xs:min-h-14",
+                      "font-display text-h3 font-extrabold tracking-tight xs:text-h2",
                       "transition-colors duration-200",
                       activo === link.id
                         ? "text-yi-verde"
@@ -148,7 +152,7 @@ export function MobileMenu({ id, abierto, activo, onCerrar, onNavegar }: MobileM
                 delay: menosMovimiento ? 0 : stagger * (navLinks.length + 1),
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="mt-10 flex flex-col items-center gap-6"
+              className="mt-6 flex flex-col items-center gap-4 xs:mt-10 xs:gap-6"
             >
               <Button
                 href={ctaLink.href}
