@@ -56,3 +56,32 @@ export const sections = [
 ] as const;
 
 export type SectionId = (typeof sections)[number]["id"];
+
+/**
+ * Enlaces del nav principal. Única fuente de verdad: la consumen el nav de
+ * escritorio, el menú móvil y el scroll-spy.
+ */
+export const navLinks = [
+  { id: "problema", label: "Problema", href: "#problema" },
+  { id: "solucion", label: "Solución", href: "#solucion" },
+  { id: "servicios", label: "Servicios", href: "#servicios" },
+  { id: "proceso", label: "Proceso", href: "#proceso" },
+  { id: "casos", label: "Casos", href: "#casos" },
+] as const;
+
+export type NavLink = (typeof navLinks)[number];
+
+/** CTA del header. */
+export const ctaLink = {
+  label: "Hablemos",
+  href: "#contacto",
+} as const;
+
+/** Logotipo por tema. Mismas dimensiones intrínsecas: cero layout shift. */
+export const logo = {
+  claro: "/yisoft_logo_transparente_claro.png",
+  oscuro: "/yisoft_logo_transparente_oscuro.png",
+  width: 2400,
+  height: 700,
+  alt: "YiSoft",
+} as const;

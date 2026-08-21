@@ -5,8 +5,10 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "./globals.css";
 import { siteConfig } from "@/lib/site";
+import Header from "@/components/layout/Header";
 import JsonLd from "@/components/layout/JsonLd";
 import LenisProvider from "@/components/layout/LenisProvider";
+import ScrollProgress from "@/components/layout/ScrollProgress";
 import ThemeScript from "@/components/layout/ThemeScript";
 
 /* Tipografías auto-hospedadas por next/font: ni un request a Google en producción. */
@@ -110,8 +112,13 @@ export default function RootLayout({
         <a href="#contenido" className="skip-link">
           Saltar al contenido
         </a>
-        {children}
-        <LenisProvider />
+        {/* LenisProvider es cliente, pero `children` sigue renderizándose en
+            el servidor: solo se comparte la instancia por contexto. */}
+        <LenisProvider>
+          <ScrollProgress />
+          <Header />
+          {children}
+        </LenisProvider>
         <Analytics />
         <SpeedInsights />
       </body>
