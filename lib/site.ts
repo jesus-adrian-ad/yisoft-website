@@ -68,6 +68,25 @@ type Site = {
       readonly texto: string;
     }[];
   };
+  readonly solucion: {
+    readonly eyebrow: string;
+    readonly titulo: string;
+    readonly subtitulo: string;
+    /** Fragmento exacto del pilar 02 que va resaltado. Único de la sección. */
+    readonly resalte: string;
+    readonly pilares: readonly {
+      /** Ordinal visible ("01"…"03"). Decorativo: el orden lo da el <ol>. */
+      readonly n: string;
+      readonly titulo: string;
+      readonly texto: string;
+      /**
+       * Ordinales de `problema.escenas` que este pilar resuelve. Cada uno se
+       * convierte en un enlace a `#problema-<n>`; el texto accesible sale del
+       * título real de la escena, así que no hay copy duplicado.
+       */
+      readonly resuelve: readonly string[];
+    }[];
+  };
   readonly nav: readonly { readonly id: string; readonly label: string; readonly href: string }[];
   readonly cta: { readonly label: string; readonly href: string };
   readonly contact: {
@@ -209,6 +228,49 @@ export const site = {
         titulo: "Tu negocio existe, pero en internet no",
         texto:
           "Tienes producto, tienes clientes y tienes Instagram. Pero cuando alguien pregunta '¿dónde veo lo que venden?', no hay a dónde mandarlo. Un perfil con fotos sueltas no es un catálogo, y no aparece cuando te buscan en Google.",
+      },
+    ],
+  },
+
+  /**
+   * Copy de "La solución".
+   *
+   * REGLA DE CONTENIDO: cada afirmación de aquí es un compromiso comercial.
+   * No se agregan pilares, viñetas, features, tecnologías ni herramientas que
+   * no estén en este objeto, y no hay cifras, porcentajes ni tiempos de
+   * entrega. Si no está escrito aquí, no se ofrece.
+   *
+   * `resuelve` amarra esta sección con "El problema": son los ordinales de
+   * las escenas que cada pilar resuelve, y viajan como enlaces reales.
+   */
+  solucion: {
+    eyebrow: "La solución",
+    titulo: "Tres formas de quitarle peso a tu operación",
+    subtitulo:
+      "No hace falta cambiar cómo trabajas. Hace falta que el software lo sostenga.",
+    // Único resalte de la sección: si se resaltan dos cosas, no se resaltó ninguna.
+    resalte: "inteligencia artificial",
+    pilares: [
+      {
+        n: "01",
+        titulo: "Un solo lugar donde vive tu operación",
+        texto:
+          "Inventario, clientes y ventas en un sistema hecho para cómo trabaja tu negocio. Cada movimiento queda registrado al momento, los reportes del mes se descargan en vez de armarse, y cada persona ve solo lo que le toca ver — con rastro de quién hizo qué.",
+        resuelve: ["01", "02", "04"],
+      },
+      {
+        n: "02",
+        titulo: "El trabajo repetitivo, hecho por software",
+        texto:
+          "Automatizamos las tareas que se repiten idénticas todos los días: capturar datos que llegan por correo, clasificar pedidos, responder las preguntas de siempre. Donde hace falta criterio y no solo reglas, usamos inteligencia artificial — para leer documentos, ordenar información o redactar respuestas. No para reemplazar a tu equipo, sino para devolverle las horas que hoy se van en copiar y pegar.",
+        resuelve: ["03"],
+      },
+      {
+        n: "03",
+        titulo: "Un lugar a donde mandar a tus clientes",
+        texto:
+          "Una página que muestra lo que vendes, aparece cuando te buscan en Google y convierte al visitante en una conversación. Rápida, hecha a la medida, y tuya — no una plantilla alquilada.",
+        resuelve: ["05"],
       },
     ],
   },
