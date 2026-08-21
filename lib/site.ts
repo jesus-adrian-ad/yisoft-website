@@ -116,7 +116,7 @@ export const site = {
       "Sistemas a la medida para empresas con varias áreas o sucursales que hoy operan a ciegas.",
     ctas: [
       { label: "Hablemos", href: "#contacto", variante: "primaria", evento: "hablemos" },
-      { label: "Ver cómo trabajo", href: "#proceso", variante: "secundaria", evento: "ver_proceso" },
+      { label: "Ver cómo trabajamos", href: "#proceso", variante: "secundaria", evento: "ver_proceso" },
     ],
   },
 
