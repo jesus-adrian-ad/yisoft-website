@@ -56,6 +56,18 @@ type Site = {
     readonly resalte: string;
     readonly credencial: string;
   };
+  readonly problema: {
+    readonly eyebrow: string;
+    readonly titulo: string;
+    /** Apunte de cierre. Va bajo el título, en la columna fija. */
+    readonly nota: string;
+    readonly escenas: readonly {
+      /** Ordinal visible ("01"…"05"). Decorativo: el orden real lo da el <ol>. */
+      readonly n: string;
+      readonly titulo: string;
+      readonly texto: string;
+    }[];
+  };
   readonly nav: readonly { readonly id: string; readonly label: string; readonly href: string }[];
   readonly cta: { readonly label: string; readonly href: string };
   readonly contact: {
@@ -151,6 +163,54 @@ export const site = {
     resalte: "lo hacemos al revés",
     credencial:
       "Años construyendo sistemas de gestión interna para el sector bancario, y landings para negocios que necesitan darse a conocer.",
+  },
+
+  /**
+   * Copy de "El problema".
+   *
+   * REGLA DE CONTENIDO: aquí se describe la vida del cliente, NO el catálogo
+   * de YiSoft. Ninguna escena puede nombrar un producto, una tecnología ni una
+   * solución —CRM, dashboard, sistema de inventario, IA, automatización,
+   * landing page—: esas palabras son de Solución y Servicios. Tampoco hay
+   * cifras ni porcentajes, porque no hay de dónde sacarlos.
+   */
+  problema: {
+    eyebrow: "El problema",
+    titulo: "¿Algo de esto te suena?",
+    nota:
+      "Si reconociste dos o más, no es que tu negocio funcione mal. Es que está creciendo sin las herramientas para sostenerlo.",
+    escenas: [
+      {
+        n: "01",
+        titulo: "El inventario vive en un cuaderno",
+        texto:
+          "Las entradas y salidas se anotan a mano, y el número real solo existe en la cabeza de quien las anotó. Cuando quieres saber qué se movió este mes, hay que volver a contarlo.",
+      },
+      {
+        n: "02",
+        titulo: "Los números del mes se arman a mano",
+        texto:
+          "Cada corte, cada factura y cada reporte para el contador sale de juntar papeles y sumar en una hoja. Es trabajo que tu negocio ya hizo una vez, repetido.",
+      },
+      {
+        n: "03",
+        titulo: "Hay trabajo que nadie debería estar haciendo",
+        texto:
+          "Alguien pasa media mañana copiando datos de un correo a una hoja, respondiendo las mismas cinco preguntas por WhatsApp, o clasificando pedidos uno por uno. Es trabajo que se repite idéntico todos los días.",
+      },
+      {
+        n: "04",
+        titulo: "Todos pueden ver todo",
+        texto:
+          "El sistema que usas no distingue entre quien vende y quien administra. Cualquiera consulta costos, edita precios o borra un registro — y no queda rastro de quién fue.",
+      },
+      {
+        n: "05",
+        titulo: "Tu negocio existe, pero en internet no",
+        texto:
+          "Tienes producto, tienes clientes y tienes Instagram. Pero cuando alguien pregunta '¿dónde veo lo que venden?', no hay a dónde mandarlo. Un perfil con fotos sueltas no es un catálogo, y no aparece cuando te buscan en Google.",
+      },
+    ],
   },
 
   /**

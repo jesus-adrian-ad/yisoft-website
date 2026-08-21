@@ -44,6 +44,11 @@
      `xs` separa los teléfonos muy angostos (320-359px, tipo iPhone SE) del
      resto: ahí el ancho base va más apretado y se relaja a partir de 360. */
   --breakpoint-xs: 22.5rem; /* 360px */
+  /* `mdx` es el punto donde "El problema" pasa de una columna a dos con la
+     columna de título fija. No coincide con ningún breakpoint de Tailwind
+     porque el que manda es el contenido: antes de 900px el carril de escenas
+     se queda sin ancho útil para un sticky que valga la pena. */
+  --breakpoint-mdx: 56.25rem; /* 900px */
   --breakpoint-3xl: 120rem; /* 1920px */
   --breakpoint-4xl: 160rem; /* 2560px */
 
@@ -65,6 +70,10 @@
   /* --- Tipografías (next/font inyecta las variables) --- */
   --font-display: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Mono del sistema: no se descarga ninguna fuente extra. Solo se usa para
+     ordinales y cifras, donde el ancho fijo es el punto. */
+  --font-yi-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
 
   /* --- Escala tipográfica FLUIDA ---
      Nada de tamaños fijos en títulos ni lead: todo con clamp(), de forma que
@@ -142,6 +151,10 @@
        completa: `min-h-[calc(100dvh-var(--header-h))]`). */
     --header-h: 4.5rem; /* 72px */
     --header-h-compacto: 3.75rem; /* 60px */
+
+    /* Alias del token de mono con el nombre corto que usa el sistema de
+       diseño. Apunta a la misma pila: cambiarla en @theme la cambia aquí. */
+    --yi-mono: var(--font-yi-mono);
   }
 
   @media (min-width: 1024px) {
@@ -483,5 +496,56 @@
   .yi-centrado-seguro {
     align-items: center;
     align-items: safe center;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   "El problema": carril de escenas
+
+   El borde izquierdo de cada escena se controla desde aquí y NO desde Motion,
+   por dos razones:
+
+   1. Quién manda en el estado "normal" lo decide CSS, no JavaScript. Antes de
+      que hidrate —o si el bundle nunca llega— el carril ya se ve terminado, y
+      no hay un parpadeo de verde a gris al montar el observador.
+   2. Motion escribe `border-color` como estilo en línea, que le ganaría a
+      cualquier regla de aquí. Por eso el borde vive en el <li> y la animación
+      de entrada envuelve solo su contenido.
+
+   Estado por defecto (móvil, sin JS, o movimiento reducido): todos verdes.
+   De 900px en adelante y con movimiento permitido: todos grises y el
+   observador marca `data-activa` en la escena que ocupa el centro.
+--------------------------------------------------------------------------- */
+@layer components {
+  .yi-escena {
+    border-inline-start-width: 2px;
+    border-inline-start-style: solid;
+    border-inline-start-color: var(--color-yi-verde);
+    transition: border-color 0.35s ease;
+  }
+
+  @media (min-width: 56.25rem) and (prefers-reduced-motion: no-preference) {
+    .yi-escena {
+      border-inline-start-color: color-mix(
+        in oklab,
+        var(--color-yi-gris) 32%,
+        transparent
+      );
+    }
+
+    :where(.dark) .yi-escena {
+      border-inline-start-color: color-mix(
+        in oklab,
+        var(--color-yi-oscuro-secundario) 26%,
+        transparent
+      );
+    }
+
+    /* Puramente decorativo: no hay `aria-current` ni nada que un lector de
+       pantalla pueda anunciar. El <ol> ya comunica el orden. */
+    .yi-escena[data-activa="true"],
+    :where(.dark) .yi-escena[data-activa="true"] {
+      border-inline-start-color: var(--color-yi-verde);
+    }
   }
 }
