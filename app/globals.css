@@ -1,17 +1,49 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Modo oscuro por clase en <html> (Tailwind v4).
-   El script bloqueante del <head> pone/quita `.dark` antes del primer render.
+   Variantes personalizadas
 --------------------------------------------------------------------------- */
+
+/* Modo oscuro por clase en <html> (Tailwind v4).
+   El script bloqueante del <head> pone/quita `.dark` antes del primer render. */
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Hover SOLO donde el puntero es real (ratón/trackpad).
+   En táctil el navegador deja el :hover "pegado" después del tap, así que
+   todo efecto decorativo de hover va con esta variante: `hover-fino:bg-...`.
+   Reservar `hover:` únicamente para cambios que también convenga ver en tap. */
+@custom-variant hover-fino {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
+/* Pantalla táctil (dedo). Útil para agrandar áreas tocables. */
+@custom-variant tactil {
+  @media (pointer: coarse) {
+    @slot;
+  }
+}
 
 /* ---------------------------------------------------------------------------
    Tokens de diseño YiSoft
+
+   REGLA DE ALTURAS (obligatoria en todo el proyecto):
+   PROHIBIDO usar 100vh / h-screen / min-h-screen. En iOS Safari la barra de
+   navegación se superpone y `vh` corta el contenido. Usar SIEMPRE las
+   unidades dinámicas: `h-dvh`, `min-h-dvh`, `100dvh`. Para altura estable
+   que no salte al ocultarse la barra, `svh` / `lvh` según el caso.
 --------------------------------------------------------------------------- */
 /* `static` mantiene TODOS los tokens en el CSS final, aunque una utilidad
    todavía no se use: son la fuente de verdad del sistema de diseño. */
 @theme static {
+  /* --- Breakpoints extra (los de Tailwind se conservan:
+         sm 640 · md 768 · lg 1024 · xl 1280 · 2xl 1536) --- */
+  --breakpoint-3xl: 120rem; /* 1920px */
+  --breakpoint-4xl: 160rem; /* 2560px */
+
   /* --- Marca --- */
   --color-yi-azul: #1b4965;
   --color-yi-verde: #2ec486;
@@ -31,52 +63,67 @@
   --font-display: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  /* --- Escala tipográfica: base 16px, razón 1.25 ---
-     Los títulos (display..h4) llevan tracking -0.02em y line-height 1.1;
-     el texto de cuerpo, line-height 1.6. */
-  --text-display: 3.25rem;
-  --text-display--line-height: 1.1;
+  /* --- Escala tipográfica FLUIDA ---
+     Nada de tamaños fijos en títulos ni lead: todo con clamp(), de forma que
+     a 320px nada se desborde y a 2560px el texto no se vea diminuto.
+     Los títulos llevan tracking -0.02em y line-height 1.1; el cuerpo 1.6. */
+  --text-display: clamp(2.25rem, 1.5rem + 3.5vw, 5rem);
+  --text-display--line-height: 1.05;
   --text-display--letter-spacing: -0.02em;
   --text-display--font-weight: 800;
 
-  --text-h1: 2.5rem;
+  --text-h1: clamp(1.875rem, 1.4rem + 2.2vw, 3.5rem);
   --text-h1--line-height: 1.1;
   --text-h1--letter-spacing: -0.02em;
   --text-h1--font-weight: 800;
 
-  --text-h2: 1.875rem;
+  --text-h2: clamp(1.5rem, 1.2rem + 1.4vw, 2.5rem);
   --text-h2--line-height: 1.1;
   --text-h2--letter-spacing: -0.02em;
   --text-h2--font-weight: 800;
 
-  --text-h3: 1.5rem;
-  --text-h3--line-height: 1.1;
+  --text-h3: clamp(1.25rem, 1.1rem + 0.7vw, 1.75rem);
+  --text-h3--line-height: 1.15;
   --text-h3--letter-spacing: -0.02em;
   --text-h3--font-weight: 700;
 
-  --text-h4: 1.125rem;
-  --text-h4--line-height: 1.2;
+  --text-h4: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-h4--line-height: 1.25;
   --text-h4--letter-spacing: -0.02em;
   --text-h4--font-weight: 700;
 
-  --text-lead: 1.125rem;
+  --text-lead: clamp(1.0625rem, 1rem + 0.4vw, 1.375rem);
   --text-lead--line-height: 1.6;
 
-  --text-body: 1rem;
+  --text-body: clamp(1rem, 0.97rem + 0.15vw, 1.125rem);
   --text-body--line-height: 1.6;
 
-  --text-small: 0.875rem;
+  --text-small: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
   --text-small--line-height: 1.6;
 
-  --text-label: 0.8125rem;
+  --text-label: clamp(0.8125rem, 0.79rem + 0.08vw, 0.875rem);
   --text-label--line-height: 1.4;
   --text-label--letter-spacing: 0.02em;
 
-  /* --- Ritmo vertical de las secciones ---
-     Se usan como `py-seccion` (móvil) y `md:py-seccion-lg` (escritorio). */
-  --spacing-seccion: 6rem;
-  --spacing-seccion-lg: 8rem;
+  /* --- Ritmo vertical de las secciones (fluido) ---
+     `py-seccion` es el valor por defecto de toda sección; `py-seccion-lg`
+     para las que necesiten más aire (hero, cierre). */
+  --spacing-seccion: clamp(4rem, 8vw, 10rem);
+  --spacing-seccion-lg: clamp(5rem, 10vw, 13rem);
+  --spacing-bloque: clamp(2rem, 4vw, 4rem);
+
+  /* --- Anchos de contenedor escalonados --- */
   --container-yi: 1200px;
+  --container-yi-3xl: 1440px;
+  --container-yi-4xl: 1680px;
+  --container-yi-narrow: 800px; /* ~70-75 caracteres por línea */
+
+  /* --- Safe area (notch / Dynamic Island / barra gestual) ---
+     Disponibles como utilidades: `pt-safe-t`, `pb-safe-b`, `pl-safe-l`... */
+  --spacing-safe-t: env(safe-area-inset-top, 0px);
+  --spacing-safe-b: env(safe-area-inset-bottom, 0px);
+  --spacing-safe-l: env(safe-area-inset-left, 0px);
+  --spacing-safe-r: env(safe-area-inset-right, 0px);
 
   /* --- Radios --- */
   --radius-boton: 10px;
@@ -92,6 +139,20 @@
     /* Compensa un header fijo al saltar a un ancla. */
     scroll-padding-top: 5rem;
     -webkit-text-size-adjust: 100%;
+  }
+
+  /* Anti-desborde global. `clip` en lugar de `hidden` porque `hidden` crea un
+     contenedor de scroll y rompe `position: sticky` de los hijos. */
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  @supports (overflow: clip) {
+    html,
+    body {
+      overflow-x: clip;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -116,6 +177,11 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Con viewport-fit=cover el contenido llega bajo el notch: lo compensamos.
+       El fondo sigue pintando de borde a borde. */
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+    min-block-size: 100dvh; /* dvh, nunca vh */
   }
 
   :where(.dark) body {
@@ -130,6 +196,8 @@
     letter-spacing: -0.02em;
     color: var(--color-yi-azul);
     text-wrap: balance;
+    /* Palabras largas (URLs, "automatización") no rompen el layout a 320px. */
+    overflow-wrap: break-word;
   }
 
   :where(.dark) :where(h1, h2, h3, h4, h5, h6) {
@@ -138,6 +206,16 @@
 
   :where(p) {
     text-wrap: pretty;
+    overflow-wrap: break-word;
+  }
+
+  /* Ninguna imagen o media puede desbordar su contenedor. */
+  :where(img, svg, video, canvas, iframe) {
+    max-width: 100%;
+  }
+
+  :where(img, video) {
+    height: auto;
   }
 
   /* Foco visible y consistente en todo lo interactivo. */
@@ -145,6 +223,18 @@
     outline: 2px solid var(--color-yi-verde);
     outline-offset: 2px;
     border-radius: 4px;
+  }
+
+  /* Objetivos táctiles: en pantallas de dedo, los controles de navegación
+     miden 44x44 como mínimo aunque su parte visible sea más chica. */
+  @media (pointer: coarse) {
+    :where(nav) :where(a, button, [role="button"]) {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-block-size: 44px;
+      min-inline-size: 44px;
+    }
   }
 
   /* Cuando Lenis está activo toma el control del scroll del documento. */
@@ -167,7 +257,7 @@
 --------------------------------------------------------------------------- */
 @utility skip-link {
   position: absolute;
-  left: 0.75rem;
+  left: calc(0.75rem + env(safe-area-inset-left, 0px));
   top: -100%;
   z-index: 100;
   border-radius: var(--radius-boton);
@@ -178,6 +268,37 @@
   transition: top 150ms ease-out;
 
   &:focus {
-    top: 0.75rem;
+    top: calc(0.75rem + env(safe-area-inset-top, 0px));
   }
+}
+
+/* Área tocable de 44x44 sin alterar el tamaño visible ni el layout.
+   Para controles pequeños (ThemeToggle, iconos sueltos). */
+@utility area-tactil {
+  position: relative;
+
+  @media (pointer: coarse) {
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      inline-size: max(100%, 44px);
+      block-size: max(100%, 44px);
+    }
+  }
+}
+
+/* Elementos fijos que deben esquivar el notch y la barra gestual. */
+@utility fijo-seguro-top {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+@utility fijo-seguro-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }

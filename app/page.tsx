@@ -12,7 +12,7 @@ export default function Home() {
           key={id}
           id={id}
           aria-label={label}
-          className="py-seccion md:py-seccion-lg"
+          className="py-seccion"
         />
       ))}
     </main>
