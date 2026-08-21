@@ -99,7 +99,18 @@ export function Problema() {
               // El borde vive aquí y lo pinta `.yi-escena` desde CSS: Motion
               // escribiría `border-color` en línea y le ganaría a la regla del
               // estado activo. Por eso la animación envuelve solo el contenido.
-              <li key={escena.n} className="yi-escena pl-4 xs:pl-5">
+              // El id es el destino de las píldoras "Resuelve" de La solución.
+              // Es estable y sale del ordinal, no del índice del array.
+              <li
+                key={escena.n}
+                id={`problema-${escena.n}`}
+                // El `scroll-mt` es solo un respiro: la compensación del
+                // header ya la pone el `scroll-padding-top` del <html>, que es
+                // lo que leen tanto Lenis como el salto nativo. Sumar aquí el
+                // alto del header otra vez dejaba la escena 100px más abajo
+                // de donde el nav deja a sus secciones.
+                className="yi-escena scroll-mt-4 pl-4 xs:pl-5"
+              >
                 {/* Un grupo por escena: cada una se revela cuando ENTRA ella,
                     no todas de golpe al entrar la sección. */}
                 <RevelarGrupo>

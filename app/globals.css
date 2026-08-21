@@ -555,3 +555,35 @@
     }
   }
 }
+
+/* ---------------------------------------------------------------------------
+   "La solución": píldora de "Resuelve"
+
+   Cada píldora es un enlace a una escena de "El problema". Se ve pequeña —el
+   ordinal y poco más— pero el área tocable la lleva a 44x44 con la utilidad
+   `area-tactil`, que pinta un pseudo-elemento centrado sin alterar el layout.
+   El hover queda para `hover-fino:` desde el JSX: en táctil el navegador deja
+   el :hover pegado después del tap.
+--------------------------------------------------------------------------- */
+@utility yi-pildora {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-yi-verde) 35%, transparent);
+  padding: 0.125rem 0.5rem;
+  font-family: var(--yi-mono);
+  /* Fluida como todo lo demás: nunca un tamaño fijo. */
+  font-size: clamp(0.625rem, 0.61rem + 0.05vw, 0.6875rem);
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  color: var(--color-yi-gris);
+  /* Solo dentro de la píldora: el ordinal jamás debe partirse en dos líneas. */
+  white-space: nowrap;
+  transition: border-color 200ms ease, color 200ms ease;
+
+  &:where(.dark, .dark *) {
+    color: var(--color-yi-oscuro-secundario);
+  }
+}
