@@ -34,14 +34,17 @@ export function Problema() {
       <Container>
         <div
           className={[
-            // Dos columnas desde 900px: 38% de título fijo, 62% de carril.
-            "mdx:grid mdx:grid-cols-[38fr_62fr] mdx:items-start",
+            // Dos columnas desde 820px: 38% de título, 62% de carril. El
+            // sticky entra después, a 900px; aquí la rejilla ya está puesta.
+            "tablet:grid tablet:grid-cols-[38fr_62fr] tablet:items-start",
             // De 1280px hacia arriba crece el hueco ENTRE columnas, nunca el
             // ancho del texto: los párrafos siguen topados en 62 caracteres.
-            "mdx:gap-x-10 lg:gap-x-14 xl:gap-x-20 3xl:gap-x-28",
+            "tablet:gap-x-8 mdx:gap-x-10 lg:gap-x-14 xl:gap-x-20 3xl:gap-x-28",
           ].join(" ")}
         >
-          {/* --- Columna izquierda: se queda fija mientras pasa el carril ---
+          {/* --- Columna izquierda ---
+              De 820 a 899px es una columna normal que hace scroll con todo lo
+              demás; el sticky solo entra desde 900px.
               `items-start` en la rejilla es lo que deja al elemento con altura
               de contenido; el área de rejilla sigue midiendo toda la fila, y
               es esa área la que suelta el sticky al acabar la sección.
@@ -86,10 +89,10 @@ export function Problema() {
               entre columnas y no la medida de las líneas. */}
           <CarrilEscenas
             className={[
-              "mt-10 mdx:mt-0 3xl:max-w-[40rem]",
+              "mt-10 tablet:mt-0 3xl:max-w-[40rem]",
               // Separación generosa entre escenas: es lo que le da altura a la
               // sección para que el sticky se note, sin un gramo de relleno.
-              "space-y-10 mdx:space-y-14 xl:space-y-16",
+              "space-y-10 tablet:space-y-12 mdx:space-y-14 xl:space-y-16",
             ].join(" ")}
           >
             {escenas.map((escena, i) => (

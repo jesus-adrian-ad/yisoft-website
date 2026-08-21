@@ -44,10 +44,16 @@
      `xs` separa los teléfonos muy angostos (320-359px, tipo iPhone SE) del
      resto: ahí el ancho base va más apretado y se relaja a partir de 360. */
   --breakpoint-xs: 22.5rem; /* 360px */
-  /* `mdx` es el punto donde "El problema" pasa de una columna a dos con la
-     columna de título fija. No coincide con ningún breakpoint de Tailwind
-     porque el que manda es el contenido: antes de 900px el carril de escenas
-     se queda sin ancho útil para un sticky que valga la pena. */
+  /* "El problema" usa DOS umbrales, y a propósito no son el mismo:
+       `tablet` (820px) → la rejilla de dos columnas. Es donde la sección se
+         alinea con "Quiénes somos", que ya va a dos desde 768px: tenerlas con
+         rejillas distintas en la misma tablet se notaba.
+       `mdx` (900px) → además, la columna de título se vuelve fija y se activa
+         el resaltado de escena. Va más arriba porque un sticky necesita
+         recorrido: por debajo de 900px la ventana es demasiado corta para que
+         el título se quede quieto el tiempo suficiente y solo se lee como un
+         tirón. Entre 820 y 899px hay dos columnas normales, ambas con scroll. */
+  --breakpoint-tablet: 51.25rem; /* 820px */
   --breakpoint-mdx: 56.25rem; /* 900px */
   --breakpoint-3xl: 120rem; /* 1920px */
   --breakpoint-4xl: 160rem; /* 2560px */
