@@ -1,26 +1,183 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ---------------------------------------------------------------------------
+   Modo oscuro por clase en <html> (Tailwind v4).
+   El script bloqueante del <head> pone/quita `.dark` antes del primer render.
+--------------------------------------------------------------------------- */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Tokens de diseño YiSoft
+--------------------------------------------------------------------------- */
+/* `static` mantiene TODOS los tokens en el CSS final, aunque una utilidad
+   todavía no se use: son la fuente de verdad del sistema de diseño. */
+@theme static {
+  /* --- Marca --- */
+  --color-yi-azul: #1b4965;
+  --color-yi-verde: #2ec486;
+  --color-yi-verde-hover: #27ae76;
+  --color-yi-tinta: #222831;
+  --color-yi-gris: #5b6770;
+  --color-yi-papel: #f7f9fa;
+  --color-yi-carbon: #101820;
+
+  /* --- Texto en modo oscuro --- */
+  --color-yi-oscuro-titulo: #ffffff;
+  --color-yi-oscuro-texto: #e8edf0;
+  --color-yi-oscuro-parrafo: #c9d3d9;
+  --color-yi-oscuro-secundario: #9fb3bf;
+
+  /* --- Tipografías (next/font inyecta las variables) --- */
+  --font-display: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* --- Escala tipográfica: base 16px, razón 1.25 ---
+     Los títulos (display..h4) llevan tracking -0.02em y line-height 1.1;
+     el texto de cuerpo, line-height 1.6. */
+  --text-display: 3.25rem;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 800;
+
+  --text-h1: 2.5rem;
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1--font-weight: 800;
+
+  --text-h2: 1.875rem;
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h2--font-weight: 800;
+
+  --text-h3: 1.5rem;
+  --text-h3--line-height: 1.1;
+  --text-h3--letter-spacing: -0.02em;
+  --text-h3--font-weight: 700;
+
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.2;
+  --text-h4--letter-spacing: -0.02em;
+  --text-h4--font-weight: 700;
+
+  --text-lead: 1.125rem;
+  --text-lead--line-height: 1.6;
+
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.6;
+
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.02em;
+
+  /* --- Ritmo vertical de las secciones ---
+     Se usan como `py-seccion` (móvil) y `md:py-seccion-lg` (escritorio). */
+  --spacing-seccion: 6rem;
+  --spacing-seccion-lg: 8rem;
+  --container-yi: 1200px;
+
+  /* --- Radios --- */
+  --radius-boton: 10px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+@layer base {
+  html {
+    /* Lenis controla el scroll suave; sin JS o con reduced-motion, el nativo. */
+    scroll-behavior: smooth;
+    /* Compensa un header fijo al saltar a un ancla. */
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-yi-papel);
+    color: var(--color-yi-tinta);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :where(.dark) body {
+    background-color: var(--color-yi-carbon);
+    color: var(--color-yi-oscuro-parrafo);
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-yi-azul);
+    text-wrap: balance;
+  }
+
+  :where(.dark) :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--color-yi-oscuro-titulo);
+  }
+
+  :where(p) {
+    text-wrap: pretty;
+  }
+
+  /* Foco visible y consistente en todo lo interactivo. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-yi-verde);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Cuando Lenis está activo toma el control del scroll del documento. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ---------------------------------------------------------------------------
+   Utilidades propias
+--------------------------------------------------------------------------- */
+@utility skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: -100%;
+  z-index: 100;
+  border-radius: var(--radius-boton);
+  background-color: var(--color-yi-verde);
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  transition: top 150ms ease-out;
+
+  &:focus {
+    top: 0.75rem;
+  }
 }
