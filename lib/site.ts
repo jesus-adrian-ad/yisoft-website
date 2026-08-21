@@ -161,11 +161,21 @@ export const sections = [
 
 export type SectionId = (typeof sections)[number]["id"];
 
-/** Logotipo por tema. Mismas dimensiones intrínsecas: cero layout shift. */
+/**
+ * Logotipo por tema.
+ *
+ * Se sirve como `background-image` y no como <img> a propósito: el navegador
+ * descarga SOLO el fondo que la hoja de estilos acaba aplicando, mientras que
+ * dos <img> se bajan siempre los dos aunque uno esté oculto por CSS.
+ *
+ * Los archivos son de 411px de ancho —3x del tamaño máximo de uso (137px)— en
+ * vez del original de 2400px. El header nunca necesitó más.
+ */
 export const logo = {
-  claro: "/yisoft_logo_transparente_claro.png",
-  oscuro: "/yisoft_logo_transparente_oscuro.png",
-  width: 2400,
-  height: 700,
+  claro: "/yisoft_logo_claro_411.webp",
+  oscuro: "/yisoft_logo_oscuro_411.webp",
+  /** Tamaño intrínseco del archivo, para reservar la caja sin layout shift. */
+  width: 411,
+  height: 120,
   alt: "YiSoft",
 } as const;

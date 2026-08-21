@@ -59,12 +59,15 @@ export function Hero() {
         ref={seccionRef}
         className={[
           "relative isolate w-full",
-          // Deja hueco al header fijo. `min-h` (no `h`) desde 360px: a 320px
-          // el hero mide lo que pida el contenido antes que apretarlo.
-          "pt-[var(--header-h)]",
+          // Deja hueco al header fijo MÁS un respiro propio, para que el badge
+          // no lo roce ni cuando el contenido cabe de sobra.
+          "pt-[calc(var(--header-h)+1.5rem)] md:pt-[calc(var(--header-h)+2.5rem)]",
+          // `min-h` (no `h`) desde 360px: a 320px el hero mide lo que pida el
+          // contenido antes que apretarlo.
           "xs:min-h-[calc(100dvh-var(--header-h))]",
-          "flex items-center",
-          "py-8 xs:py-12 md:py-16",
+          // Centrado que no desborda por arriba: ver `.yi-centrado-seguro`.
+          "flex yi-centrado-seguro",
+          "pb-8 xs:pb-12 md:pb-16",
         ].join(" ")}
       >
         {/* --- Fondo decorativo --- */}
