@@ -58,6 +58,14 @@ export function CarrilEscenas({
         // Una sola activa: si dos caben en la banda gana la primera en orden
         // de documento, que es la que el ojo lee como "la de arriba".
         const elegida = escenas.find((li) => dentro.has(li));
+
+        // Si la banda quedó vacía NO se apaga nada: se conserva la última
+        // marcada. Limpiar aquí dejaba el carril entero en gris al pasar de
+        // la escena 05 —se leía como si algo se hubiera roto— y, entrando a
+        // la sección desde abajo, tampoco marcaba la 05, que es la correcta.
+        // El estado activo solo cambia cuando una escena ENTRA en la banda.
+        if (!elegida) return;
+
         for (const li of escenas) {
           if (li === elegida) li.dataset.activa = "true";
           else delete li.dataset.activa;
