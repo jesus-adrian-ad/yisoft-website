@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { logo, site } from "@/lib/site";
 import { cn } from "@/lib/cn";
 import { irASeccion } from "@/lib/navegacion";
@@ -135,8 +134,9 @@ export function Header() {
             solido ? "h-[var(--header-h-compacto)]" : "h-[var(--header-h)]",
           )}
         >
-          {/* Logo: los dos archivos se renderizan y el tema decide cuál se ve.
-              Mismas dimensiones reservadas → cero layout shift al alternar. */}
+          {/* Logo: un solo elemento cuyo fondo cambia con el tema. La caja va
+              dimensionada por clases, así que no hay layout shift ni depende
+              de que la imagen haya cargado. */}
           <a
             href="#inicio"
             aria-label="YiSoft — inicio"
@@ -147,24 +147,15 @@ export function Header() {
             }}
             className="relative block h-7 w-[96px] shrink-0 xs:h-8 xs:w-[110px] lg:h-10 lg:w-[137px]"
           >
-            <Image
-              src={logo.claro}
-              alt={logo.alt}
-              width={logo.width}
-              height={logo.height}
-              priority
-              sizes="(min-width: 1024px) 137px, (min-width: 360px) 110px, 96px"
-              className="h-full w-full object-contain object-left dark:hidden"
-            />
-            <Image
-              src={logo.oscuro}
-              alt=""
+            <span
               aria-hidden="true"
-              width={logo.width}
-              height={logo.height}
-              priority
-              sizes="(min-width: 1024px) 137px, (min-width: 360px) 110px, 96px"
-              className="hidden h-full w-full object-contain object-left dark:block"
+              className="yi-logo block h-full w-full"
+              style={
+                {
+                  "--yi-logo-claro": `url(${logo.claro})`,
+                  "--yi-logo-oscuro": `url(${logo.oscuro})`,
+                } as CSSProperties
+              }
             />
           </a>
 

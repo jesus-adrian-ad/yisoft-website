@@ -439,3 +439,49 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
 }
+
+/* ---------------------------------------------------------------------------
+   Logotipo del header
+
+   Va como `background-image` y no como <img> por una razón de red: dos <img>
+   cruzados con `dark:hidden` se descargan LOS DOS, porque el navegador no
+   sabe cuál acabará viéndose. Un fondo CSS solo se pide si la regla que lo
+   declara termina aplicándose, así que aquí se baja un único archivo.
+
+   El intercambio por tema lo hace la clase `.dark` que el script bloqueante
+   del <head> pone antes del primer pintado: sin destello y respetando el
+   toggle manual (que un <picture> con prefers-color-scheme no respetaría).
+--------------------------------------------------------------------------- */
+@layer components {
+  .yi-logo {
+    background-image: var(--yi-logo-claro);
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: contain;
+  }
+
+  /* Misma capa y más abajo: gana en oscuro sin subir especificidad. */
+  :where(.dark) .yi-logo {
+    background-image: var(--yi-logo-oscuro);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Centrado vertical seguro
+
+   Las dos declaraciones van en la misma regla a propósito: el navegador que
+   no entienda la palabra clave `safe` descarta la segunda y se queda con el
+   `center` de siempre. Hacerlo con dos clases de Tailwind no funciona —
+   `.items-center` se genera DESPUÉS de la utilidad arbitraria y le gana por
+   orden de aparición, que es quien decide a igual especificidad.
+
+   `safe center` centra mientras el contenido quepa y se alinea al inicio en
+   cuanto no cabe, en lugar de desbordar por arriba (donde el recorte no se
+   puede recuperar con scroll).
+--------------------------------------------------------------------------- */
+@layer components {
+  .yi-centrado-seguro {
+    align-items: center;
+    align-items: safe center;
+  }
+}
