@@ -1,6 +1,7 @@
 import { sections } from "@/lib/site";
 import Hero from "@/components/sections/Hero";
 import Nosotros, { ID_TITULO_NOSOTROS } from "@/components/sections/Nosotros";
+import Problema, { ID_TITULO_PROBLEMA } from "@/components/sections/Problema";
 
 /**
  * Esqueleto de la landing. Cada <section id> queda lista para recibir su
@@ -29,6 +30,15 @@ export default function Home() {
           return (
             <section key={id} id={id} aria-labelledby={ID_TITULO_NOSOTROS}>
               <Nosotros />
+            </section>
+          );
+        }
+
+        if (id === "problema") {
+          // Igual que "nosotros": la nombra su propio h2, no un `aria-label`.
+          return (
+            <section key={id} id={id} aria-labelledby={ID_TITULO_PROBLEMA}>
+              <Problema />
             </section>
           );
         }
