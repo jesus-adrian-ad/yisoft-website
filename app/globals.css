@@ -133,11 +133,28 @@
    Base
 --------------------------------------------------------------------------- */
 @layer base {
+  :root {
+    /* Alto del header. Lo consumen el propio header, `scroll-padding-top` y
+       cualquier sección que necesite compensarlo (p. ej. un hero a pantalla
+       completa: `min-h-[calc(100dvh-var(--header-h))]`). */
+    --header-h: 4.5rem; /* 72px */
+    --header-h-compacto: 3.75rem; /* 60px */
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-h: 5.25rem; /* 84px */
+      --header-h-compacto: 4.5rem; /* 72px */
+    }
+  }
+
   html {
     /* Lenis controla el scroll suave; sin JS o con reduced-motion, el nativo. */
     scroll-behavior: smooth;
-    /* Compensa un header fijo al saltar a un ancla. */
-    scroll-padding-top: 5rem;
+    /* Compensa el header fijo al saltar a un ancla (también sin JS). */
+    scroll-padding-top: calc(
+      var(--header-h) + env(safe-area-inset-top, 0px) + 0.5rem
+    );
     -webkit-text-size-adjust: 100%;
   }
 

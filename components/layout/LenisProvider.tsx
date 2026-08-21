@@ -1,9 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import Lenis from "lenis";
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
+
+/**
+ * Instancia compartida de Lenis. Es `null` cuando el usuario pide movimiento
+ * reducido: los consumidores deben tener camino alternativo (scroll nativo).
+ */
+const LenisContext = createContext<Lenis | null>(null);
+
+export function useLenis(): Lenis | null {
+  return useContext(LenisContext);
+}
 
 /**
  * Inicializa Lenis para el scroll suave del documento.
@@ -12,22 +28,24 @@ const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
  *   (y se destruye si ya estaba activo cuando cambia la preferencia).
  * - En móvil no toca el gesto táctil: `syncTouch` queda desactivado, así que
  *   el scroll táctil sigue siendo el nativo del navegador.
- * - Intercepta los enlaces ancla del nav (#inicio, #problema, ...) para que
- *   el salto sea suave y actualiza el hash sin recargar.
+ * - Intercepta los enlaces ancla sueltos del documento (los del nav los
+ *   maneja el propio Header, que sabe cuánto mide).
  * - Se limpia por completo en el unmount.
  */
-export function LenisProvider() {
+export function LenisProvider({ children }: { children: ReactNode }) {
+  const [lenis, setLenis] = useState<Lenis | null>(null);
+
   useEffect(() => {
     const mq = window.matchMedia(REDUCED_MOTION);
 
-    let lenis: Lenis | null = null;
+    let instancia: Lenis | null = null;
     let rafId = 0;
     let onAnchorClick: ((e: MouseEvent) => void) | null = null;
 
     function start() {
-      if (lenis) return;
+      if (instancia) return;
 
-      lenis = new Lenis({
+      instancia = new Lenis({
         lerp: 0.1,
         wheelMultiplier: 1,
         smoothWheel: true,
@@ -38,7 +56,7 @@ export function LenisProvider() {
       });
 
       const raf = (time: number) => {
-        lenis?.raf(time);
+        instancia?.raf(time);
         rafId = requestAnimationFrame(raf);
       };
       rafId = requestAnimationFrame(raf);
@@ -52,6 +70,8 @@ export function LenisProvider() {
         const target = event.target as HTMLElement | null;
         const anchor = target?.closest?.("a");
         if (!anchor) return;
+        // El Header gestiona sus propios enlaces con el offset correcto.
+        if (anchor.closest("[data-nav-propio]")) return;
 
         const href = anchor.getAttribute("href");
         if (!href || !href.startsWith("#") || href === "#") return;
@@ -61,18 +81,17 @@ export function LenisProvider() {
         if (!destino) return;
 
         event.preventDefault();
-        lenis?.scrollTo(destino as HTMLElement, {
-          offset: -80, // deja aire para un header fijo
-          duration: 1.1,
-        });
+        // Sin offset: Lenis ya resta el `scroll-padding-top` del <html>,
+        // que es donde vive la compensación del header.
+        instancia?.scrollTo(destino as HTMLElement, { duration: 1.1 });
         history.pushState(null, "", href);
-        // El foco debe seguir al scroll para no romper la navegación por teclado.
         const destinoEl = destino as HTMLElement;
         if (!destinoEl.hasAttribute("tabindex")) destinoEl.setAttribute("tabindex", "-1");
         destinoEl.focus({ preventScroll: true });
       };
 
       document.addEventListener("click", onAnchorClick);
+      setLenis(instancia);
     }
 
     function stop() {
@@ -80,8 +99,9 @@ export function LenisProvider() {
       rafId = 0;
       if (onAnchorClick) document.removeEventListener("click", onAnchorClick);
       onAnchorClick = null;
-      lenis?.destroy();
-      lenis = null;
+      instancia?.destroy();
+      instancia = null;
+      setLenis(null);
     }
 
     if (!mq.matches) start();
@@ -98,7 +118,7 @@ export function LenisProvider() {
     };
   }, []);
 
-  return null;
+  return <LenisContext.Provider value={lenis}>{children}</LenisContext.Provider>;
 }
 
 export default LenisProvider;
