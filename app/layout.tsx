@@ -81,6 +81,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // `cover` deja que el fondo llegue bajo el notch; el padding de safe-area
+  // en globals.css evita que el contenido quede tapado.
+  viewportFit: "cover",
+  width: "device-width",
+  initialScale: 1,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#F7F9FA" },
     { media: "(prefers-color-scheme: dark)", color: "#101820" },

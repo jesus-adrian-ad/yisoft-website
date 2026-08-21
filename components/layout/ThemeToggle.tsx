@@ -65,10 +65,13 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       aria-pressed={theme === null ? undefined : isDark}
       title="Cambiar tema"
       className={cn(
-        "relative inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-boton",
+        // `area-tactil` amplía el área tocable a 44x44 en pantallas de dedo
+        // sin cambiar el tamaño visible ni mover el layout.
+        "area-tactil inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-boton",
         "border-2 border-yi-azul/15 text-yi-azul transition-colors duration-200",
-        "hover:border-yi-verde hover:text-yi-verde",
-        "dark:border-white/20 dark:text-yi-oscuro-texto dark:hover:border-yi-verde dark:hover:text-yi-verde",
+        "hover-fino:border-yi-verde hover-fino:text-yi-verde",
+        "dark:border-white/20 dark:text-yi-oscuro-texto",
+        "dark:hover-fino:border-yi-verde dark:hover-fino:text-yi-verde",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yi-verde",
         className,
       )}
