@@ -322,3 +322,120 @@
   padding-left: env(safe-area-inset-left, 0px);
   padding-right: env(safe-area-inset-right, 0px);
 }
+
+/* ---------------------------------------------------------------------------
+   Hero
+
+   El revelado del titular es CSS puro, NO Motion, y a propósito. El h1 es el
+   elemento LCP: si su estado inicial lo pintara React, el texto quedaría
+   oculto hasta que hidratara (cientos de ms en un móvil lento) y el LCP se
+   mediría ahí. Una animación CSS arranca en cuanto el navegador parsea la
+   hoja, funciona sin JS y sobrevive a un bundle que falla.
+
+   Además se anima SOLO `translate`, nunca `opacity`: Chrome descarta del LCP
+   los elementos con opacity 0, pero sí contabiliza los desplazados. Así el
+   LCP se registra en el primer paint aunque la línea aún esté entrando.
+--------------------------------------------------------------------------- */
+@keyframes yi-revelar {
+  from {
+    translate: 0 110%;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes yi-pulso {
+  0%,
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+  50% {
+    opacity: 0.45;
+    scale: 0.75;
+  }
+}
+
+@keyframes yi-aro {
+  0% {
+    opacity: 0.55;
+    scale: 0.7;
+  }
+  70%,
+  100% {
+    opacity: 0;
+    scale: 2.1;
+  }
+}
+
+@keyframes yi-scroll-punto {
+  0% {
+    translate: 0 -2px;
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    translate: 0 26px;
+    opacity: 0;
+  }
+}
+
+@keyframes yi-inclinar {
+  from {
+    transform: perspective(1400px) rotateY(0deg) rotateX(0deg);
+  }
+  to {
+    transform: perspective(1400px) rotateY(-6deg) rotateX(2deg);
+  }
+}
+
+@layer components {
+  /* Ventana que recorta la línea mientras sube.
+     El padding/margin compensado evita que `overflow: hidden` decapite los
+     descendentes (la "y" de "ventas") ni el subrayado del foco. */
+  .yi-mascara {
+    display: block;
+    overflow: hidden;
+    padding-block-end: 0.14em;
+    margin-block-end: -0.14em;
+  }
+
+  .yi-linea {
+    display: block;
+    animation: yi-revelar 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .yi-punto-pulso {
+    animation: yi-pulso 2.4s ease-in-out infinite;
+  }
+
+  .yi-aro-pulso {
+    animation: yi-aro 2.4s ease-out infinite;
+  }
+
+  .yi-scroll-punto {
+    animation: yi-scroll-punto 2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+
+  /* Inclinación 3D del panel: solo en escritorio. En móvil y tablet el panel
+     va plano y de frente, donde el espacio no sobra y el sesgo resta lectura. */
+  @media (min-width: 1024px) {
+    .yi-inclinado {
+      transform: perspective(1400px) rotateY(-6deg) rotateX(2deg);
+      animation: yi-inclinar 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+    }
+  }
+}
+
+/* Grano fino generado con feTurbulence e incrustado como data URI: da textura
+   al fondo sin una sola petición de red. */
+@utility yi-grano {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}

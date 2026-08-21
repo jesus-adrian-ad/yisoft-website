@@ -35,6 +35,18 @@ type Site = {
     readonly ogTitle: string;
     readonly ogDescription: string;
   };
+  readonly hero: {
+    readonly badge: string;
+    readonly titulo: readonly [string, string];
+    readonly subtitulo: string;
+    readonly ctas: readonly {
+      readonly label: string;
+      readonly href: string;
+      readonly variante: "primaria" | "secundaria";
+      /** Etiqueta del evento de analítica (snake_case). */
+      readonly evento: string;
+    }[];
+  };
   readonly nav: readonly { readonly id: string; readonly label: string; readonly href: string }[];
   readonly cta: { readonly label: string; readonly href: string };
   readonly contact: {
@@ -86,6 +98,26 @@ export const site = {
     ogTitle: "Tu inventario, tus clientes y tus ventas, en un solo lugar",
     ogDescription:
       "Sistemas de gestión y landings a la medida para empresas que operan desconectadas.",
+  },
+
+  /**
+   * Copy del hero. Vive aquí y no en el JSX para que el texto de portada se
+   * pueda revisar sin abrir un componente.
+   */
+  hero: {
+    badge: "Disponible para nuevos proyectos",
+    // Dos líneas separadas a propósito: cada una se revela por su cuenta y la
+    // segunda va en un tono más apagado para crear jerarquía dentro del h1.
+    titulo: [
+      "Tu inventario, tus clientes y tus ventas.",
+      "Al fin en el mismo lugar.",
+    ],
+    subtitulo:
+      "Sistemas a la medida para empresas con varias áreas o sucursales que hoy operan a ciegas.",
+    ctas: [
+      { label: "Hablemos", href: "#contacto", variante: "primaria", evento: "hablemos" },
+      { label: "Ver cómo trabajo", href: "#proceso", variante: "secundaria", evento: "ver_proceso" },
+    ],
   },
 
   /**

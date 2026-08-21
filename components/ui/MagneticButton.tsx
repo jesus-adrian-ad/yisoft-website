@@ -3,6 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import Button, { type ButtonProps } from "@/components/ui/Button";
+import { cn } from "@/lib/cn";
 import {
   useHoverFino,
   usePrefiereMenosMovimiento,
@@ -18,6 +19,12 @@ type MagneticButtonProps = SinChildren<ButtonProps> & {
   radio?: number;
   /** Desplazamiento máximo del botón, en px. Sutil a propósito. */
   fuerza?: number;
+  /**
+   * Clases del envoltorio, no del botón. Necesario porque el envoltorio es
+   * `inline-flex`: sin poder estirarlo, `fluido` en el botón no llega a
+   * ocupar el ancho completo en móvil.
+   */
+  claseEnvoltorio?: string;
 };
 
 /* Muelle con inercia perceptible pero sin rebote payaso. */
@@ -34,6 +41,7 @@ export function MagneticButton({
   children,
   radio = 80,
   fuerza = 8,
+  claseEnvoltorio,
   ...botonProps
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -90,7 +98,11 @@ export function MagneticButton({
   }, [activo, radio, fuerza, x, y]);
 
   return (
-    <motion.div ref={ref} style={{ x: sx, y: sy }} className="inline-flex will-change-transform">
+    <motion.div
+      ref={ref}
+      style={{ x: sx, y: sy }}
+      className={cn("inline-flex will-change-transform", claseEnvoltorio)}
+    >
       <Button {...(botonProps as ButtonProps)}>
         <motion.span style={{ x: tx, y: ty }} className="inline-flex items-center gap-2">
           {children}
