@@ -1,49 +1,121 @@
 /**
- * Constantes únicas del sitio. Cambiar aquí se propaga a metadatos,
- * sitemap, robots, JSON-LD y la imagen de Open Graph.
+ * Única fuente de verdad del sitio. Cambiar aquí se propaga a metadatos,
+ * sitemap, robots, JSON-LD, la imagen de Open Graph y el nav.
+ *
+ * Los textos viven separados a propósito:
+ *  - `seo`    → lo que lee Google (title/description del SERP).
+ *  - `social` → lo que lee la vista previa al compartir (WhatsApp, X, Slack).
+ * No se heredan entre sí: el SERP premia precisión y palabras clave, la vista
+ * previa premia que se lea humano.
  */
-export const SITE_URL = "https://yisoft.mx";
 
-export const siteConfig = {
+/** Versión canónica: CON www. El apex redirige 301 desde next.config.ts. */
+export const SITE_URL = "https://www.yisoft-development.com";
+
+/** Dominio sin protocolo, para mostrarlo como texto (pie de la imagen OG). */
+export const SITE_DOMINIO = "www.yisoft-development.com";
+
+type Site = {
+  readonly url: string;
+  readonly name: string;
+  readonly slogan: string;
+  readonly locale: string;
+  readonly lang: string;
+  readonly author: string;
+  readonly authorRole: string;
+  readonly areaServed: readonly string[];
+  readonly serviceType: readonly string[];
+  readonly seo: {
+    readonly title: string;
+    readonly titleTemplate: string;
+    readonly description: string;
+    readonly keywords: readonly string[];
+  };
+  readonly social: {
+    readonly ogTitle: string;
+    readonly ogDescription: string;
+  };
+  readonly nav: readonly { readonly id: string; readonly label: string; readonly href: string }[];
+  readonly cta: { readonly label: string; readonly href: string };
+  readonly contact: {
+    readonly email: string;
+    readonly whatsapp: string;
+  };
+  readonly ogImage: string;
+  readonly logo: string;
+};
+
+export const site = {
   url: SITE_URL,
   name: "YiSoft",
-  title: "YiSoft — Sistemas de inventario, clientes y ventas para tu negocio",
   slogan: "Páginas web y sistemas para tu negocio",
-  description:
-    "Conectamos las áreas y sucursales de tu empresa en un solo sistema: inventario, clientes y ventas al día, sin hojas de cálculo sueltas.",
   locale: "es_MX",
   lang: "es-MX",
   author: "Jesús Adrián",
   authorRole: "Desarrollador de software",
   areaServed: ["Monterrey", "Nuevo León", "México"],
-  keywords: [
-    "desarrollo de software",
-    "sistemas de inventario",
-    "sistema de ventas",
-    "CRM para empresas",
-    "desarrollo de APIs",
-    "automatización de procesos",
-    "integración de datos",
-    "páginas web Monterrey",
-    "software a la medida",
-    "freelance desarrollo web",
-  ],
   serviceType: [
     "Desarrollo web",
     "Desarrollo de APIs y sistemas",
     "Automatización de procesos",
     "Integración de datos",
   ],
-  contact: {
-    email: "contacto@yisoft.mx",
-    phone: "+52 81 0000 0000",
-    whatsapp: "https://wa.me/528100000000",
+
+  /* --- Google: title sin sufijo de marca (lo añade solo desde og:site_name) --- */
+  seo: {
+    title: "Sistemas de inventario, clientes, ventas y landings",
+    titleTemplate: "%s | YiSoft",
+    description:
+      "YiSoft conecta las áreas y sucursales de tu empresa en un solo sistema: inventario, clientes y ventas al día. También landings que sí venden.",
+    keywords: [
+      "desarrollo de software",
+      "sistemas de inventario",
+      "sistema de ventas",
+      "CRM para empresas",
+      "desarrollo de APIs",
+      "automatización de procesos",
+      "integración de datos",
+      "páginas web Monterrey",
+      "software a la medida",
+      "freelance desarrollo web",
+    ],
   },
+
+  /* --- Vista previa al compartir: tono humano, distinto al del SERP --- */
+  social: {
+    ogTitle: "Tu inventario, tus clientes y tus ventas, en un solo lugar",
+    ogDescription:
+      "Sistemas de gestión y landings a la medida para empresas que operan desconectadas.",
+  },
+
+  /**
+   * Enlaces del nav principal. Los consumen el nav de escritorio, el menú
+   * móvil y el scroll-spy.
+   */
+  nav: [
+    { id: "problema", label: "Problema", href: "#problema" },
+    { id: "solucion", label: "Solución", href: "#solucion" },
+    { id: "servicios", label: "Servicios", href: "#servicios" },
+    { id: "proceso", label: "Proceso", href: "#proceso" },
+    { id: "casos", label: "Casos", href: "#casos" },
+  ],
+
+  /** CTA del header. */
+  cta: { label: "Hablemos", href: "#contacto" },
+
+  /** Vacíos hasta tener los datos reales: nada apunta a un contacto inventado. */
+  contact: {
+    email: "",
+    whatsapp: "",
+  },
+
   ogImage: `${SITE_URL}/opengraph-image`,
   logo: `${SITE_URL}/logo.png`,
-} as const;
+} as const satisfies Site;
 
-/** Secciones de la landing, en orden. Usadas por el nav y por page.tsx. */
+export type NavLink = (typeof site.nav)[number];
+
+/** Secciones de la landing, en orden. Usadas por page.tsx. */
 export const sections = [
   { id: "inicio", label: "Inicio" },
   { id: "problema", label: "Problema" },
@@ -56,26 +128,6 @@ export const sections = [
 ] as const;
 
 export type SectionId = (typeof sections)[number]["id"];
-
-/**
- * Enlaces del nav principal. Única fuente de verdad: la consumen el nav de
- * escritorio, el menú móvil y el scroll-spy.
- */
-export const navLinks = [
-  { id: "problema", label: "Problema", href: "#problema" },
-  { id: "solucion", label: "Solución", href: "#solucion" },
-  { id: "servicios", label: "Servicios", href: "#servicios" },
-  { id: "proceso", label: "Proceso", href: "#proceso" },
-  { id: "casos", label: "Casos", href: "#casos" },
-] as const;
-
-export type NavLink = (typeof navLinks)[number];
-
-/** CTA del header. */
-export const ctaLink = {
-  label: "Hablemos",
-  href: "#contacto",
-} as const;
 
 /** Logotipo por tema. Mismas dimensiones intrínsecas: cero layout shift. */
 export const logo = {

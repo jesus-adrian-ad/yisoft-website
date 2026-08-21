@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
-import { siteConfig } from "@/lib/site";
+import { SITE_DOMINIO, site } from "@/lib/site";
 
-export const alt = `${siteConfig.name} — ${siteConfig.slogan}`;
+export const alt = `${site.name} — ${site.social.ogTitle}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -71,12 +71,12 @@ export default async function OpengraphImage() {
           </div>
         </div>
 
-        {/* Wordmark + eslogan */}
+        {/* Wordmark + titular social */}
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
               display: "flex",
-              fontSize: 168,
+              fontSize: 140,
               fontWeight: 800,
               letterSpacing: -6,
               lineHeight: 1,
@@ -93,21 +93,27 @@ export default async function OpengraphImage() {
               height: 8,
               borderRadius: 8,
               backgroundColor: "#2EC486",
-              marginTop: 36,
-              marginBottom: 36,
+              marginTop: 28,
+              marginBottom: 28,
               display: "flex",
             }}
           />
 
+          {/* El titular de Open Graph, NO el de SEO. A 46px sobre 900px de
+              ancho útil cabe en dos líneas: satori parte por espacios, así
+              que nunca corta una palabra a la mitad. */}
           <div
             style={{
-              fontSize: 44,
+              display: "flex",
+              maxWidth: 900,
+              fontSize: 46,
               fontWeight: 700,
+              lineHeight: 1.25,
               color: "#E8EDF0",
               letterSpacing: -1,
             }}
           >
-            {siteConfig.slogan}
+            {site.social.ogTitle}
           </div>
         </div>
 
@@ -122,7 +128,7 @@ export default async function OpengraphImage() {
             color: "#9FB3BF",
           }}
         >
-          <div style={{ display: "flex" }}>yisoft.mx</div>
+          <div style={{ display: "flex" }}>{SITE_DOMINIO}</div>
           <div style={{ display: "flex" }}>Monterrey, N.L.</div>
         </div>
       </div>
