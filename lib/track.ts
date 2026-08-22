@@ -9,6 +9,10 @@ export type TrackEvent =
   | "form_submit"
   | "form_error"
   | "whatsapp_click"
+  /* El nombre va en español como el resto de la base de código. `email_click`
+     se conserva porque cambiarlo partiría en dos la serie histórica de
+     Analytics, pero lo nuevo usa `correo_click`. */
+  | "correo_click"
   | "email_click"
   | "section_view"
   | "theme_toggle";

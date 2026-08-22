@@ -72,6 +72,14 @@
   --color-yi-papel: #f7f9fa;
   --color-yi-carbon: #101820;
 
+  /* --- Error de formulario ---
+     Dos rojos, uno por tema, porque ninguno funciona en los dos fondos.
+     `#b3261e` sobre el campo blanco da 7.0:1 y `#ffb4ab` sobre el carbón da
+     9.9:1: los dos pasan AA de sobra, también para el texto pequeño de los
+     mensajes, que es donde se usan. */
+  --color-yi-error: #b3261e;
+  --color-yi-error-oscuro: #ffb4ab;
+
   /* --- Texto en modo oscuro --- */
   --color-yi-oscuro-titulo: #ffffff;
   --color-yi-oscuro-texto: #e8edf0;
@@ -504,6 +512,29 @@
   :root:where(.dark) {
     --logo-mark: #ffffff;
     --logo-dev: #9fb3bf;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Campo trampa del formulario de contacto (honeypot)
+
+   Fuera de la pantalla, NUNCA con `display: none` ni `visibility: hidden`:
+   los bots que valen algo saltan los campos ocultos de esa forma, precisamente
+   porque es como se ocultan las trampas. Sacarlo del flujo con posición
+   absoluta lo deja "visible" para quien solo lee el DOM y lo rellena.
+
+   El `tabindex="-1"` y el `aria-hidden` del elemento cierran el otro lado: ni
+   con teclado ni con lector de pantalla se puede llegar a él, así que una
+   persona no lo llena por accidente.
+--------------------------------------------------------------------------- */
+@layer components {
+  .yi-trampa {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 }
 
