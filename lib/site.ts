@@ -87,6 +87,27 @@ type Site = {
       readonly resuelve: readonly string[];
     }[];
   };
+  readonly servicios: {
+    readonly eyebrow: string;
+    readonly titulo: string;
+    readonly subtitulo: string;
+    /** Aviso de alcance. Va una sola vez, al pie de la sección. */
+    readonly nota: string;
+    /** Fragmento exacto del servicio 02 que va resaltado. Único de la sección. */
+    readonly resalte: string;
+    readonly items: readonly {
+      /** Ordinal visible ("01"…"05"). Decorativo: el orden lo da el <ol>. */
+      readonly n: string;
+      readonly titulo: string;
+      readonly texto: string;
+      /**
+       * Lo que se entrega. El ÚLTIMO siempre es el cierre abierto ("Y más,
+       * según tu operación") y se pinta distinto por su posición, no por una
+       * bandera: si deja de ir al final, deja de ser el cierre.
+       */
+      readonly entregables: readonly string[];
+    }[];
+  };
   readonly nav: readonly { readonly id: string; readonly label: string; readonly href: string }[];
   readonly cta: { readonly label: string; readonly href: string };
   readonly contact: {
@@ -271,6 +292,94 @@ export const site = {
         texto:
           "Una página que muestra lo que vendes, aparece cuando te buscan en Google y convierte al visitante en una conversación. Rápida, hecha a la medida, y tuya — no una plantilla alquilada.",
         resuelve: ["05"],
+      },
+    ],
+  },
+
+  /**
+   * Copy de "Servicios".
+   *
+   * REGLA DE CONTENIDO: cada línea es un compromiso comercial. No se agregan
+   * servicios, entregables, tecnologías, plazos ni precios que no estén aquí.
+   *
+   * Y una regla más, que es la que se rompe sola: este copy describe QUÉ se
+   * construye, nunca cuántas veces se ha construido. Nada de "con experiencia
+   * en", "hemos entregado", "años haciendo", contadores de proyectos, logos ni
+   * nombres de clientes — tampoco para la inteligencia artificial.
+   */
+  servicios: {
+    eyebrow: "Servicios",
+    titulo: "Qué construimos",
+    subtitulo:
+      "Cada proyecto se arma a la medida. Esto es lo que normalmente incluye.",
+    nota: "El alcance final de cada proyecto se define en la propuesta.",
+    // Único resalte de la sección: si se resaltan dos cosas, no se resaltó ninguna.
+    resalte: "inteligencia artificial",
+    items: [
+      {
+        n: "01",
+        titulo: "Sistema de gestión a la medida",
+        texto:
+          "Inventario, clientes y ventas en un solo sistema. Control de accesos por persona, historial de cada movimiento, y reportes que se descargan listos para tu contador.",
+        entregables: [
+          "Sistema web",
+          "Panel de administración",
+          "Roles y permisos",
+          "Exportación a Excel y PDF",
+          "Capacitación a tu equipo",
+          "Y más, según tu operación",
+        ],
+      },
+      {
+        n: "02",
+        titulo: "Automatización de procesos",
+        texto:
+          "Conectamos lo que ya usas y quitamos del camino el trabajo repetitivo. Donde hace falta criterio y no solo reglas, entra la inteligencia artificial: leer documentos, clasificar, redactar.",
+        entregables: [
+          "Flujos funcionando en tu operación",
+          "Documentación de qué hace cada uno",
+          "Monitoreo de fallas",
+          "Y más, según tu operación",
+        ],
+      },
+      {
+        n: "03",
+        titulo: "Landing pages y sitios web",
+        texto:
+          "Una página rápida, hecha a la medida, que aparece en Google y convierte visitas en conversaciones. No una plantilla alquilada.",
+        entregables: [
+          "Diseño propio",
+          "Optimización para buscadores",
+          "Formulario de contacto",
+          "Analítica",
+          "Despliegue y dominio",
+          "Y más, según tu operación",
+        ],
+      },
+      {
+        n: "04",
+        titulo: "Integraciones y APIs",
+        texto:
+          "Que tus sistemas se hablen entre ellos. Facturación, punto de venta, tienda en línea, o lo que ya tengas funcionando.",
+        entregables: [
+          "Integración construida y probada",
+          "Documentación técnica",
+          "Manejo de errores para que nada se pierda en silencio",
+          "Y más, según tu operación",
+        ],
+      },
+      {
+        n: "05",
+        titulo: "Tiendas y ecommerce",
+        texto:
+          "Vender en línea sin entregarle una comisión a una plataforma por cada venta. Catálogo, carrito y pedidos conectados a tu inventario real.",
+        entregables: [
+          "Tienda en línea",
+          "Pasarela de pagos",
+          "Panel de pedidos",
+          "Conexión con tu sistema de inventario",
+          "Y más, según tu operación",
+        ],
       },
     ],
   },
