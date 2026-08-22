@@ -12,10 +12,31 @@ async function cargarFuente(archivo: string) {
   return readFile(join(process.cwd(), "assets", archivo));
 }
 
+/**
+ * El lockup se incrusta como data URI del SVG real, no se redibuja con
+ * tipografía: así la vista previa social usa exactamente el mismo vector que
+ * el sitio, con las letras ya convertidas a trazos (satori no tendría que
+ * resolver ninguna fuente para ellas).
+ *
+ * Va la variante oscura porque el lienzo de la tarjeta es #101820.
+ */
+async function cargarLockup() {
+  const svg = await readFile(
+    join(process.cwd(), "public", "yisoft_dev_logo_oscuro.svg"),
+  );
+  return `data:image/svg+xml;base64,${svg.toString("base64")}`;
+}
+
+/* Ancho de dibujo del lockup en la tarjeta. El alto sale de la proporción
+   2.643:1 del viewBox, así que nunca se deforma ni se corta. */
+const LOCKUP_ANCHO = 560;
+const LOCKUP_ALTO = Math.round((LOCKUP_ANCHO * 1833) / 4845);
+
 export default async function OpengraphImage() {
-  const [extraBold, bold] = await Promise.all([
+  const [extraBold, bold, lockup] = await Promise.all([
     cargarFuente("Montserrat-ExtraBold.ttf"),
     cargarFuente("Montserrat-Bold.ttf"),
+    cargarLockup(),
   ]);
 
   return new ImageResponse(
@@ -71,21 +92,15 @@ export default async function OpengraphImage() {
           </div>
         </div>
 
-        {/* Wordmark + titular social */}
+        {/* Lockup + titular social */}
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div
-            style={{
-              display: "flex",
-              fontSize: 140,
-              fontWeight: 800,
-              letterSpacing: -6,
-              lineHeight: 1,
-              color: "#FFFFFF",
-            }}
-          >
-            <span>Yi</span>
-            <span style={{ color: "#2EC486" }}>Soft</span>
-          </div>
+          <img
+            src={lockup}
+            alt={site.name}
+            width={LOCKUP_ANCHO}
+            height={LOCKUP_ALTO}
+            style={{ display: "flex" }}
+          />
 
           <div
             style={{

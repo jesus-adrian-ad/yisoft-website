@@ -1,0 +1,81 @@
+import { cn } from "@/lib/cn";
+
+/* ---------------------------------------------------------------------------
+   Logotipo de YiSoft Development
+
+   El lockup va como SVG EN LÍNEA, no como <img> ni como background-image:
+
+   - Un solo dibujo en el DOM sirve a los dos temas. Antes había dos archivos
+     (claro y oscuro) y el navegador tenía que decidir cuál pedir; ahora no se
+     descarga ninguno: el logo viaja dentro del HTML.
+   - El cambio de tema es puro CSS. Los tres colores del kit salen de las
+     variables --logo-acento / --logo-mark / --logo-dev, que globals.css
+     redefine bajo la clase `.dark` que el script bloqueante del <head> pone
+     antes del primer pintado. Sin JavaScript, sin destello, sin repintado.
+   - Las letras vienen convertidas a trazos, así que el dibujo no depende de
+     que ninguna tipografía haya cargado.
+
+   Accesibilidad: el <svg> es el único nodo anunciable (role="img" +
+   aria-label). Ningún <path> lleva etiqueta propia, así que los símbolos
+   "<", "/" y ">" del dibujo nunca se leen sueltos.
+--------------------------------------------------------------------------- */
+
+/** Tamaño intrínseco del lockup: 4845x1833, o sea 2.643:1. */
+const ANCHO_VB = 4845;
+const ALTO_VB = 1833;
+
+type LogoProps = {
+  /**
+   * Ancho en px. Se escriben `width` y `height` en el <svg> para reservar la
+   * caja desde el primer render (CLS 0). Si una utilidad de Tailwind cambia
+   * el ancho por breakpoint, `aspect-ratio` recalcula el alto solo: el lockup
+   * no se deforma nunca.
+   */
+  ancho: number;
+  className?: string;
+  /** Para cuando el logo va dentro de un elemento que ya lleva su etiqueta. */
+  "aria-hidden"?: boolean;
+};
+
+export function Logo({ ancho, className, ...resto }: LogoProps) {
+  const alto = (ancho * ALTO_VB) / ANCHO_VB;
+
+  return (
+    <svg
+      viewBox={`0 0 ${ANCHO_VB} ${ALTO_VB}`}
+      width={ancho}
+      height={alto}
+      role="img"
+      aria-label="YiSoft Development"
+      focusable="false"
+      className={cn("block h-auto", className)}
+      style={{ aspectRatio: `${ANCHO_VB} / ${ALTO_VB}` }}
+      {...resto}
+    >
+      <g transform="translate(60,1028) scale(1,-1)">
+        <path transform="translate(0.0,0)" fill="var(--logo-acento)" d="M551 91 58 273V427L551 609V463L114 308V392L551 237Z" />
+        <path transform="translate(599.0,0)" fill="var(--logo-mark)" d="M247 0V296L293 177L-20 700H189L415 321H294L521 700H713L401 177L445 296V0Z" />
+        <path transform="translate(1282.0,0)" fill="var(--logo-mark)" d="M61 0V542H251V0ZM156 602Q104 602 72.0 631.0Q40 660 40 703Q40 746 72.0 775.0Q104 804 156 804Q208 804 240.0 776.5Q272 749 272 706Q272 661 240.5 631.5Q209 602 156 602Z" />
+        <path transform="translate(1585.0,0)" fill="var(--logo-acento)" d="M316 -14Q230 -14 150.5 7.5Q71 29 21 63L86 209Q133 179 194.5 159.5Q256 140 317 140Q358 140 383.0 147.5Q408 155 419.5 167.5Q431 180 431 197Q431 221 409.0 235.0Q387 249 352.0 258.0Q317 267 274.5 276.0Q232 285 189.5 299.0Q147 313 112.0 335.5Q77 358 55.0 394.5Q33 431 33 487Q33 550 67.5 601.0Q102 652 171.0 683.0Q240 714 343 714Q412 714 478.5 698.5Q545 683 597 653L536 506Q486 533 437.0 546.5Q388 560 342 560Q301 560 276.0 551.5Q251 543 240.0 529.0Q229 515 229 497Q229 474 250.5 460.5Q272 447 307.5 438.5Q343 430 385.5 421.0Q428 412 470.5 398.5Q513 385 548.0 362.5Q583 340 604.5 303.5Q626 267 626 212Q626 151 591.5 99.5Q557 48 488.5 17.0Q420 -14 316 -14Z" />
+        <path transform="translate(2222.0,0)" fill="var(--logo-acento)" d="M333 -9Q244 -9 175.0 27.0Q106 63 66.5 126.5Q27 190 27 272Q27 354 66.5 417.0Q106 480 175.0 515.5Q244 551 333 551Q422 551 491.5 515.5Q561 480 600.0 417.0Q639 354 639 272Q639 190 600.0 126.5Q561 63 491.5 27.0Q422 -9 333 -9ZM333 142Q366 142 391.5 157.0Q417 172 432.0 201.5Q447 231 447 272Q447 313 432.0 341.5Q417 370 391.5 385.0Q366 400 333 400Q301 400 275.5 385.0Q250 370 234.5 341.5Q219 313 219 272Q219 231 234.5 201.5Q250 172 275.5 157.0Q301 142 333 142Z" />
+        <path transform="translate(2878.0,0)" fill="var(--logo-acento)" d="M83 0V536Q83 634 141.5 692.5Q200 751 309 751Q344 751 378.0 744.0Q412 737 435 723L388 589Q376 596 361.0 600.5Q346 605 331 605Q301 605 284.5 587.5Q268 570 268 534V495L273 416V0ZM4 380V522H397V380Z" />
+        <path transform="translate(3274.0,0)" fill="var(--logo-acento)" d="M303 -9Q199 -9 141.0 42.5Q83 94 83 198V663H273V200Q273 171 289.0 154.5Q305 138 330 138Q364 138 388 155L435 22Q411 6 376.0 -1.5Q341 -9 303 -9ZM4 401V542H397V401Z" />
+        <path transform="translate(3711.0,0)" fill="var(--logo-acento)" d="M-37 -100 293 842H462L132 -100Z" />
+        <path transform="translate(4116.0,0)" fill="var(--logo-acento)" d="M58 91V237L496 392V308L58 463V609L551 427V273Z" />
+        <path transform="translate(0.0,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M659 0H273V263H644Q788 263 885.5 314.0Q983 365 1032.0 472.0Q1081 579 1081 746Q1081 912 1031.5 1018.5Q982 1125 885.5 1176.0Q789 1227 646 1227H266V1490H664Q888 1490 1049.5 1400.5Q1211 1311 1298.0 1144.5Q1385 978 1385 746Q1385 513 1298.0 346.0Q1211 179 1048.5 89.5Q886 0 659 0ZM440 1490V0H135V1490Z" />
+        <path transform="translate(460.8,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M135 0V1490H1132V1237H440V877H1080V628H440V253H1134V0Z" />
+        <path transform="translate(889.1,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M571 0 49 1490H388L626 771Q669 635 713.0 471.5Q757 308 806 114H740Q788 310 830.0 472.5Q872 635 913 771L1143 1490H1480L970 0Z" />
+        <path transform="translate(1356.7,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M135 0V1490H1132V1237H440V877H1080V628H440V253H1134V0Z" />
+        <path transform="translate(1785.0,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M135 0V1490H440V253H1083V0Z" />
+        <path transform="translate(2201.4,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M789 -20Q592 -20 434.5 70.0Q277 160 185.5 331.0Q94 502 94 744Q94 987 185.5 1158.5Q277 1330 434.5 1420.0Q592 1510 789 1510Q987 1510 1144.0 1420.0Q1301 1330 1392.5 1158.5Q1484 987 1484 744Q1484 502 1392.5 331.0Q1301 160 1144.0 70.0Q987 -20 789 -20ZM789 251Q905 251 991.5 307.5Q1078 364 1126.0 474.5Q1174 585 1174 744Q1174 905 1126.0 1015.5Q1078 1126 991.5 1182.5Q905 1239 789 1239Q674 1239 587.0 1182.0Q500 1125 452.0 1014.5Q404 904 404 744Q404 585 452.0 475.0Q500 365 587.0 308.0Q674 251 789 251Z" />
+        <path transform="translate(2675.9,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M135 0V1490H716Q886 1490 1005.0 1425.5Q1124 1361 1186.5 1247.5Q1249 1134 1249 987Q1249 839 1185.5 726.5Q1122 614 1001.5 550.5Q881 487 709 487H335V733H660Q754 733 814.5 765.5Q875 798 904.5 855.0Q934 912 934 987Q934 1062 904.5 1118.5Q875 1175 814.0 1206.5Q753 1238 659 1238H440V0Z" />
+        <path transform="translate(3115.7,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M135 0V1490H603L845 806Q860 758 879.5 682.0Q899 606 919.0 518.0Q939 430 956.5 347.0Q974 264 985 203H926Q937 263 954.5 345.5Q972 428 992.0 516.0Q1012 604 1031.5 681.0Q1051 758 1066 806L1304 1490H1774V0H1467V702Q1467 751 1468.5 824.0Q1470 897 1472.5 981.5Q1475 1066 1477.0 1151.5Q1479 1237 1480 1313H1499Q1480 1230 1457.0 1141.5Q1434 1053 1410.5 970.0Q1387 887 1366.0 817.5Q1345 748 1330 702L1083 0H826L575 702Q560 748 539.0 816.5Q518 885 494.5 968.0Q471 1051 447.0 1139.5Q423 1228 402 1313H425Q426 1241 428.0 1156.0Q430 1071 432.5 985.5Q435 900 436.5 826.5Q438 753 438 702V0Z" />
+        <path transform="translate(3635.7,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M135 0V1490H1132V1237H440V877H1080V628H440V253H1134V0Z" />
+        <path transform="translate(4064.0,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M135 0V1490H475L946 736Q982 678 1019.0 610.0Q1056 542 1094.5 459.0Q1133 376 1171 272H1140Q1133 355 1127.5 449.0Q1122 543 1118.0 629.0Q1114 715 1114 775V1490H1426V0H1085L657 684Q610 761 570.0 833.5Q530 906 486.5 993.5Q443 1081 383 1203H422Q428 1095 434.0 996.0Q440 897 443.5 816.5Q447 736 447 685V0Z" />
+        <path transform="translate(4536.1,-660.0) scale(0.1382)" fill="var(--logo-dev)" d="M75 1237V1490H1292V1237H837V0H531V1237Z" />
+      </g>
+    </svg>
+  );
+}
+
+export default Logo;

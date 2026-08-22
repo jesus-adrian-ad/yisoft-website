@@ -478,28 +478,32 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Logotipo del header
+   Colores del logotipo
 
-   Va como `background-image` y no como <img> por una razón de red: dos <img>
-   cruzados con `dark:hidden` se descargan LOS DOS, porque el navegador no
-   sabe cuál acabará viéndose. Un fondo CSS solo se pide si la regla que lo
-   declara termina aplicándose, así que aquí se baja un único archivo.
+   El lockup se dibuja como SVG en línea (components/ui/Logo.tsx) y sus tres
+   colores salen de aquí. Así el logo cambia de tema con el resto de la página
+   —sin JavaScript, sin destello y sin pedir un segundo archivo— y respeta el
+   toggle manual, porque la clase `.dark` la pone el script bloqueante del
+   <head> antes del primer pintado.
 
-   El intercambio por tema lo hace la clase `.dark` que el script bloqueante
-   del <head> pone antes del primer pintado: sin destello y respetando el
-   toggle manual (que un <picture> con prefers-color-scheme no respetaría).
+   --logo-acento  brackets y "Soft"   (igual en los dos temas)
+   --logo-mark    "Yi"
+   --logo-dev     "DEVELOPMENT"
 --------------------------------------------------------------------------- */
-@layer components {
-  .yi-logo {
-    background-image: var(--yi-logo-claro);
-    background-repeat: no-repeat;
-    background-position: left center;
-    background-size: contain;
+@layer base {
+  :root {
+    --logo-acento: #2ec486;
+    --logo-mark: #1b4965;
+    --logo-dev: #5b6770;
   }
 
-  /* Misma capa y más abajo: gana en oscuro sin subir especificidad. */
-  :where(.dark) .yi-logo {
-    background-image: var(--yi-logo-oscuro);
+  /* `:root:where(.dark)` y NO `:where(.dark)`: los dos apuntan al mismo <html>,
+     así que quien gana lo decide la especificidad. `:where()` vale 0 y perdería
+     contra el `:root` de arriba; envolverlo en `:root` los empata y entonces
+     manda el orden, que es el que queremos. */
+  :root:where(.dark) {
+    --logo-mark: #ffffff;
+    --logo-dev: #9fb3bf;
   }
 }
 
