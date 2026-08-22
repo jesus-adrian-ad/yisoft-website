@@ -108,6 +108,31 @@ type Site = {
       readonly entregables: readonly string[];
     }[];
   };
+  readonly proceso: {
+    readonly eyebrow: string;
+    readonly titulo: string;
+    readonly subtitulo: string;
+    readonly pasos: readonly {
+      /** Ordinal visible ("01"…"05"). Decorativo: el orden lo da el <ol>. */
+      readonly n: string;
+      readonly titulo: string;
+      readonly texto: string;
+    }[];
+    /** Franja de cierre: lo que pasa DESPUÉS de entregar. */
+    readonly cierre: {
+      readonly titulo: string;
+      /**
+       * Los dos compromisos posteriores a la entrega. Sus títulos NO son
+       * encabezados en el DOM: irían como h4 sueltos y ensuciarían el esquema.
+       */
+      readonly bloques: readonly {
+        readonly titulo: string;
+        readonly texto: string;
+      }[];
+      /** Nota al pie de la franja. Una línea, y se cita literal. */
+      readonly nota: string;
+    };
+  };
   readonly nav: readonly { readonly id: string; readonly label: string; readonly href: string }[];
   readonly cta: { readonly label: string; readonly href: string };
   readonly contact: {
@@ -382,6 +407,73 @@ export const site = {
         ],
       },
     ],
+  },
+
+  /**
+   * Copy de "Proceso".
+   *
+   * REGLA DE CONTENIDO, la más estricta de la página: cada línea de aquí es un
+   * compromiso CONTRACTUAL. No se agregan pasos, plazos, precios, tiempos de
+   * respuesta, SLAs ni promesas de disponibilidad que no estén en este objeto.
+   * Los "90 días" de garantía son 90 días: ni otro número, ni suavizados con
+   * un "hasta". Y la nota de cierre está redactada así a propósito —ni más
+   * agresiva ni más vaga—, así que se cita literal.
+   *
+   * Tampoco hay testimonios, casos ni cifras de proyectos entregados: eso no
+   * se inventa, y aquí no hay de dónde sacarlo.
+   */
+  proceso: {
+    eyebrow: "Cómo trabajamos",
+    titulo: "De la primera plática al sistema funcionando",
+    subtitulo: "Sin sorpresas en el camino y sin sorpresas en la factura.",
+    pasos: [
+      {
+        n: "01",
+        titulo: "Conversación",
+        texto:
+          "Nos cuentas cómo opera tu negocio y qué te está costando trabajo. Las sesiones para entender el problema son sin costo y sin compromiso. Si no somos lo que necesitas, te lo decimos ahí mismo.",
+      },
+      {
+        n: "02",
+        titulo: "Propuesta y acuerdo",
+        texto:
+          "Con el problema claro, te entregamos un documento con el alcance, las tareas desglosadas, el tiempo estimado y el precio. Nada empieza hasta que ambos estemos de acuerdo por escrito.",
+      },
+      {
+        n: "03",
+        titulo: "Análisis a detalle",
+        texto:
+          "Ya con el proyecto en marcha, trabajamos contigo para aterrizar cada requerimiento: cómo funciona hoy ese proceso, quién lo usa, qué casos raros existen. Esta parte es acompañada — no te dejamos llenar un formato solo.",
+      },
+      {
+        n: "04",
+        titulo: "Construcción con avances visibles",
+        texto:
+          "No desaparecemos un mes para reaparecer con una sorpresa. Ves el sistema funcionando por partes, opinas sobre lo real y corregimos el rumbo temprano, cuando todavía es barato.",
+      },
+      {
+        n: "05",
+        titulo: "Entrega y capacitación",
+        texto:
+          "El sistema queda funcionando en tu operación, tu equipo sabe usarlo, y te entregamos la documentación de lo que se construyó.",
+      },
+    ],
+    cierre: {
+      titulo: "Y después de entregar",
+      bloques: [
+        {
+          titulo: "90 días de garantía",
+          texto:
+            "Si algo no funciona como lo acordamos, lo arreglamos sin costo. Los errores son nuestros, no tuyos.",
+        },
+        {
+          titulo: "Soporte y mantenimiento",
+          texto:
+            "Para sistemas que viven y crecen, un plan mensual con soporte, mantenimiento y mejoras. Se contrata por un año y se renueva si te sirve.",
+        },
+      ],
+      nota: "Lo que cambia el alcance acordado se cotiza como un requerimiento nuevo — y lo sabrás antes de que empecemos a trabajarlo, nunca en la factura.",
+    },
   },
 
   /**

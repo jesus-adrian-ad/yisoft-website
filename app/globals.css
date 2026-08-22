@@ -639,3 +639,117 @@
   font-weight: 600;
   color: var(--color-yi-verde);
 }
+
+/* ---------------------------------------------------------------------------
+   "Proceso": carril vertical de pasos
+
+   Punto y línea son pseudo-elementos: CSS puro, ni un SVG ni un canvas, y el
+   carril ya está pintado en el primer frame —antes de hidratar— así que no
+   hay ni parpadeo ni layout shift.
+
+   Mismo reparto de responsabilidades que `.yi-escena`: el estado por defecto
+   lo decide CSS (todos los puntos rellenos de verde, sin halo) y JavaScript
+   solo añade `data-activa` en el paso central. Sin bundle, en móvil o con
+   movimiento reducido, la sección se ve terminada igual.
+--------------------------------------------------------------------------- */
+@layer components {
+  .yi-paso {
+    position: relative;
+
+    /* Diámetro TOTAL del punto: con `box-sizing: border-box` los 2px de borde
+       van por dentro, así que el círculo mide 13px de caja a caja. */
+    --yi-punto: 13px;
+    /* Distancia del borde superior del <li> al borde superior del punto. Se
+       calcula para que el punto quede centrado con la primera línea del
+       título, cuyo tamaño es fluido: por eso el valor sube con el viewport. */
+    --yi-punto-top: 0.3rem;
+    /* Relleno del punto cuando está hueco: es el fondo REAL de la sección, de
+       modo que la línea del carril parece pasar por detrás y no a través. */
+    --yi-punto-fondo: var(--color-yi-papel);
+    --yi-carril: color-mix(in oklab, var(--color-yi-gris) 32%, transparent);
+
+    /* A 320px el carril se lleva 1.75rem en lugar de 2.25rem: el contrato pide
+       recortar este padding antes que quitar el carril. Desde 360px, normal. */
+    padding-inline-start: 1.75rem;
+    padding-block-end: 2rem;
+  }
+
+  :where(.dark) .yi-paso {
+    /* El fondo de la sección en oscuro es el carbón con un velo blanco al
+       2.5%; el punto hueco tiene que ser exactamente ese color mezclado. */
+    --yi-punto-fondo: color-mix(in srgb, #ffffff 2.5%, var(--color-yi-carbon));
+    --yi-carril: color-mix(
+      in oklab,
+      var(--color-yi-oscuro-secundario) 26%,
+      transparent
+    );
+  }
+
+  @media (min-width: 22.5rem) {
+    .yi-paso {
+      padding-inline-start: 2.25rem;
+    }
+  }
+
+  /* El título crece con el viewport, así que su primera línea baja de centro
+     y el punto tiene que acompañarla. Dos escalones bastan. */
+  @media (min-width: 51.25rem) {
+    .yi-paso {
+      --yi-punto-top: 0.45rem;
+    }
+  }
+
+  @media (min-width: 96rem) {
+    .yi-paso {
+      --yi-punto-top: 0.5rem;
+    }
+  }
+
+  .yi-paso::before {
+    content: "";
+    position: absolute;
+    inset-block-start: var(--yi-punto-top);
+    inset-inline-start: 0;
+    inline-size: var(--yi-punto);
+    block-size: var(--yi-punto);
+    border-radius: 999px;
+    border: 2px solid var(--color-yi-verde);
+    /* Por defecto RELLENO. Ver el bloque de media query de abajo. */
+    background-color: var(--color-yi-verde);
+    transition: background-color 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  /* La línea entre punto y punto. El `:not(:last-child)` es el requisito
+     literal: el carril NO continúa después del último paso. */
+  .yi-paso:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    /* Centrada en el eje del punto (13px / 2 = 6.5px, menos medio píxel). */
+    inset-inline-start: calc(var(--yi-punto) / 2 - 0.5px);
+    inset-block-start: calc(var(--yi-punto-top) + var(--yi-punto) + 5px);
+    /* Se estira 5px por debajo del <li> para dejar el MISMO respiro antes del
+       punto siguiente que el que dejó después del propio: el `padding-block-end`
+       de 2rem termina justo donde arranca el paso de abajo, y el punto de ese
+       paso empieza --yi-punto-top más adelante. */
+    inset-block-end: calc(5px - var(--yi-punto-top));
+    inline-size: 1px;
+    background-color: var(--yi-carril);
+  }
+
+  /* Solo de 768px en adelante y con movimiento permitido entra el seguimiento:
+     los puntos se vacían y el observador rellena el del paso central. Por
+     debajo, o con `prefers-reduced-motion`, se queda el estado de arriba
+     (todos verdes, sin halo) y no se monta ningún observador. */
+  @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+    .yi-paso::before {
+      background-color: var(--yi-punto-fondo);
+    }
+
+    /* Decorativo y nada más: no hay `aria-current` ni ningún atributo que un
+       lector de pantalla pueda anunciar. El <ol> ya comunica el orden. */
+    .yi-paso[data-activa="true"]::before {
+      background-color: var(--color-yi-verde);
+      box-shadow: 0 0 0 4px rgba(46, 196, 134, 0.18);
+    }
+  }
+}

@@ -4,6 +4,7 @@ import Nosotros, { ID_TITULO_NOSOTROS } from "@/components/sections/Nosotros";
 import Problema, { ID_TITULO_PROBLEMA } from "@/components/sections/Problema";
 import Solucion, { ID_TITULO_SOLUCION } from "@/components/sections/Solucion";
 import Servicios, { ID_TITULO_SERVICIOS } from "@/components/sections/Servicios";
+import Proceso, { ID_TITULO_PROCESO } from "@/components/sections/Proceso";
 
 /**
  * Esqueleto de la landing. Cada <section id> queda lista para recibir su
@@ -59,6 +60,15 @@ export default function Home() {
           return (
             <section key={id} id={id} aria-labelledby={ID_TITULO_SERVICIOS}>
               <Servicios />
+            </section>
+          );
+        }
+
+        if (id === "proceso") {
+          // Igual que las anteriores: la nombra su propio h2.
+          return (
+            <section key={id} id={id} aria-labelledby={ID_TITULO_PROCESO}>
+              <Proceso />
             </section>
           );
         }
