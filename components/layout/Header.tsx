@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
-import { logo, site } from "@/lib/site";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { site } from "@/lib/site";
 import { cn } from "@/lib/cn";
 import { irASeccion } from "@/lib/navegacion";
 import { useLenis } from "@/components/layout/LenisProvider";
@@ -9,6 +9,7 @@ import { useScrollListener } from "@/lib/hooks/useScrollListener";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 import { usePrefiereMenosMovimiento } from "@/lib/hooks/useMediaQuery";
 import Container from "@/components/ui/Container";
+import Logo from "@/components/ui/Logo";
 import MagneticButton from "@/components/ui/MagneticButton";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import NavLink from "@/components/layout/NavLink";
@@ -134,28 +135,27 @@ export function Header() {
             solido ? "h-[var(--header-h-compacto)]" : "h-[var(--header-h)]",
           )}
         >
-          {/* Logo: un solo elemento cuyo fondo cambia con el tema. La caja va
-              dimensionada por clases, así que no hay layout shift ni depende
-              de que la imagen haya cargado. */}
+          {/* Logo: SVG en línea, sin peticiones de red y sin esperar a que
+              cargue nada. El ancho sube por breakpoint (96 / 116 / 132px) y
+              el alto lo deriva el propio componente de la proporción del
+              lockup, así que la caja queda reservada y el CLS es 0.
+              A 320px conviven logo (96px) y hamburguesa (44px) de sobra. */}
           <a
             href="#inicio"
-            aria-label="YiSoft — inicio"
+            aria-label="YiSoft Development — inicio"
             onClick={(event) => {
               if (event.metaKey || event.ctrlKey || event.shiftKey) return;
               event.preventDefault();
               navegar("#inicio");
             }}
-            className="relative block h-7 w-[96px] shrink-0 xs:h-8 xs:w-[110px] lg:h-10 lg:w-[137px]"
+            className="block shrink-0"
           >
-            <span
-              aria-hidden="true"
-              className="yi-logo block h-full w-full"
-              style={
-                {
-                  "--yi-logo-claro": `url(${logo.claro})`,
-                  "--yi-logo-oscuro": `url(${logo.oscuro})`,
-                } as CSSProperties
-              }
+            <Logo
+              ancho={96}
+              className="w-[96px] sm:w-[116px] lg:w-[132px]"
+              // El nombre accesible lo da el aria-label del enlace; si el SVG
+              // también se anunciara, el logo se leería dos veces.
+              aria-hidden
             />
           </a>
 

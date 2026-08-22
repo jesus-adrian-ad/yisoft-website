@@ -18,6 +18,8 @@ export const SITE_DOMINIO = "www.yisoft-development.com";
 type Site = {
   readonly url: string;
   readonly name: string;
+  /** Marca en prosa. Ver la nota junto al valor. */
+  readonly nameCorto: string;
   readonly slogan: string;
   readonly locale: string;
   readonly lang: string;
@@ -145,7 +147,11 @@ type Site = {
 
 export const site = {
   url: SITE_URL,
-  name: "YiSoft",
+  name: "YiSoft Development",
+  /** Para la prosa: en el texto corrido la marca se sigue diciendo "YiSoft".
+      El nombre completo queda para la identidad (og:site_name, JSON-LD,
+      application-name, publisher y la etiqueta del logo). */
+  nameCorto: "YiSoft",
   slogan: "Páginas web y sistemas para tu negocio",
   locale: "es_MX",
   lang: "es-MX",
@@ -497,7 +503,10 @@ export const site = {
   },
 
   ogImage: `${SITE_URL}/opengraph-image`,
-  logo: `${SITE_URL}/logo.png`,
+  /* Logo raster para datos estructurados: los consumidores de JSON-LD no
+     rasterizan SVG. Apuntaba a /logo.png, un archivo que nunca existió en el
+     proyecto. */
+  logo: `${SITE_URL}/yisoft_dev_logo.png`,
 } as const satisfies Site;
 
 export type NavLink = (typeof site.nav)[number];
@@ -514,22 +523,3 @@ export const sections = [
 ] as const;
 
 export type SectionId = (typeof sections)[number]["id"];
-
-/**
- * Logotipo por tema.
- *
- * Se sirve como `background-image` y no como <img> a propósito: el navegador
- * descarga SOLO el fondo que la hoja de estilos acaba aplicando, mientras que
- * dos <img> se bajan siempre los dos aunque uno esté oculto por CSS.
- *
- * Los archivos son de 411px de ancho —3x del tamaño máximo de uso (137px)— en
- * vez del original de 2400px. El header nunca necesitó más.
- */
-export const logo = {
-  claro: "/yisoft_logo_claro_411.webp",
-  oscuro: "/yisoft_logo_oscuro_411.webp",
-  /** Tamaño intrínseco del archivo, para reservar la caja sin layout shift. */
-  width: 411,
-  height: 120,
-  alt: "YiSoft",
-} as const;

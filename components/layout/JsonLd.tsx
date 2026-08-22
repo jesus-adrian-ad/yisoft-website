@@ -10,6 +10,8 @@ const professionalService = {
   "@type": "ProfessionalService",
   "@id": `${site.url}/#organizacion`,
   name: site.name,
+  /* La marca se conoce por el nombre corto tanto como por el completo. */
+  alternateName: site.nameCorto,
   description: site.seo.description,
   url: site.url,
   logo: site.logo,

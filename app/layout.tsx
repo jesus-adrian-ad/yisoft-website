@@ -81,10 +81,10 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
-  icons: {
-    icon: [{ url: "/icon", sizes: "64x64", type: "image/png" }],
-    apple: [{ url: "/apple-icon", sizes: "180x180", type: "image/png" }],
-  },
+  /* Sin `icons` a mano. Los íconos ahora son archivos estáticos
+     (app/icon.png y app/apple-icon.png) y Next inyecta sus <link> solo, con
+     la ruta versionada correcta. Declararlos aquí como "/icon" apuntaba a una
+     ruta que ya no existe: los estáticos se sirven en /icon.png. */
   category: "technology",
 };
 
