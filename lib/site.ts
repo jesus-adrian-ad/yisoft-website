@@ -485,7 +485,6 @@ export const site = {
     { id: "solucion", label: "Solución", href: "#solucion" },
     { id: "servicios", label: "Servicios", href: "#servicios" },
     { id: "proceso", label: "Proceso", href: "#proceso" },
-    { id: "casos", label: "Casos", href: "#casos" },
   ],
 
   /** CTA del header. */
@@ -511,7 +510,6 @@ export const sections = [
   { id: "solucion", label: "Solución" },
   { id: "servicios", label: "Servicios" },
   { id: "proceso", label: "Proceso" },
-  { id: "casos", label: "Casos" },
   { id: "contacto", label: "Contacto" },
 ] as const;
 
