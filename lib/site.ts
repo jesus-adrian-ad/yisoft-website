@@ -135,6 +135,64 @@ type Site = {
       readonly nota: string;
     };
   };
+  readonly contacto: {
+    readonly eyebrow: string;
+    readonly titulo: string;
+    readonly subtitulo: string;
+    /** Va con peso visual propio: es la promesa concreta de la sección. */
+    readonly expectativa: string;
+    /** Salida alternativa al formulario. Nunca se esconde tras el envío. */
+    readonly directo: {
+      readonly titulo: string;
+      readonly whatsapp: {
+        readonly label: string;
+        readonly href: string;
+        /** Advierte que abre en ventana nueva. */
+        readonly aria: string;
+      };
+      readonly correoPrefijo: string;
+    };
+    readonly formulario: {
+      readonly campos: {
+        readonly nombre: { readonly label: string; readonly ayuda?: string };
+        readonly correo: { readonly label: string; readonly ayuda: string };
+        readonly necesidad: {
+          readonly label: string;
+          readonly vacia: string;
+        };
+        readonly mensaje: { readonly label: string; readonly ayuda: string };
+      };
+      /**
+       * Opciones del select. `valor` es lo que viaja al servidor y alimenta el
+       * enum de validación; `label` es lo que se ve. No se derivan uno del
+       * otro para que cambiar el texto visible no invalide envíos anteriores.
+       */
+      readonly opciones: readonly {
+        readonly valor: string;
+        readonly label: string;
+      }[];
+      readonly boton: string;
+      readonly botonEnviando: string;
+    };
+    /**
+     * El consentimiento. El texto de apoyo NO es decorativo: es lo que hace
+     * válida la casilla, así que se cita completo y a la vista.
+     */
+    readonly privacidad: {
+      readonly aceptacion: string;
+      readonly apoyo: string;
+    };
+    readonly exito: {
+      readonly titulo: string;
+      /** `{nombre}` se sustituye por lo que la persona escribió. */
+      readonly texto: string;
+    };
+    /** Siempre lleva salida alternativa: correo y teléfono a la vista. */
+    readonly error: {
+      readonly texto: string;
+      readonly telefonoVisible: string;
+    };
+  };
   readonly nav: readonly { readonly id: string; readonly label: string; readonly href: string }[];
   readonly cta: { readonly label: string; readonly href: string };
   readonly contact: {
@@ -493,13 +551,84 @@ export const site = {
     { id: "proceso", label: "Proceso", href: "#proceso" },
   ],
 
+  /* -------------------------------------------------------------------------
+     "Hablemos": última sección de contenido.
+
+     Los cinco campos del formulario son una decisión, no un descuido. No hay
+     presupuesto, teléfono, empresa ni "cómo nos encontraste": cada campo de
+     más es gente que abandona, y ninguno de esos cambia con qué se responde.
+  ------------------------------------------------------------------------- */
+  contacto: {
+    eyebrow: "Contacto",
+    titulo: "Hablemos",
+    subtitulo:
+      "Cuéntanos qué está pasando en tu operación. La primera plática es sin costo y sin compromiso.",
+    expectativa: "Te respondemos en menos de un día hábil.",
+
+    directo: {
+      titulo: "¿Prefieres escribir directo?",
+      whatsapp: {
+        label: "Escríbenos por WhatsApp",
+        href: "https://wa.me/528186580644?text=Hola%2C%20me%20interesa%20trabajar%20con%20YiSoft",
+        aria: "Escríbenos por WhatsApp (abre en una ventana nueva)",
+      },
+      correoPrefijo: "O al correo",
+    },
+
+    formulario: {
+      campos: {
+        nombre: { label: "Nombre" },
+        correo: {
+          label: "Correo",
+          ayuda: "Ahí te respondemos.",
+        },
+        necesidad: {
+          label: "Qué necesitas",
+          vacia: "Elige una opción",
+        },
+        mensaje: {
+          label: "Mensaje",
+          ayuda: "Qué hace tu negocio hoy y qué te gustaría que hiciera.",
+        },
+      },
+      opciones: [
+        { valor: "sistema-gestion", label: "Sistema de gestión" },
+        { valor: "automatizacion", label: "Automatización de procesos" },
+        { valor: "landing", label: "Landing page o sitio web" },
+        { valor: "integracion", label: "Integración con otro sistema" },
+        { valor: "tienda", label: "Tienda en línea" },
+        { valor: "no-lo-se", label: "Aún no lo sé" },
+      ],
+      boton: "Enviar mensaje",
+      botonEnviando: "Enviando…",
+    },
+
+    privacidad: {
+      aceptacion: "Acepto que YiSoft use mis datos para responder a este mensaje.",
+      apoyo:
+        "Solo recabamos tu nombre, correo y mensaje, y los usamos únicamente para contestarte. No los compartimos con terceros ni los usamos para publicidad. Si quieres que los borremos, escríbenos y lo hacemos.",
+    },
+
+    exito: {
+      titulo: "Mensaje recibido",
+      texto:
+        "Gracias, {nombre}. Te respondemos en menos de un día hábil. Si es urgente, escríbenos por WhatsApp.",
+    },
+
+    error: {
+      texto:
+        "No pudimos enviar tu mensaje. Escríbenos directo a jesus-adrian@yisoft-development.com o por WhatsApp al 81 8658 0644.",
+      telefonoVisible: "81 8658 0644",
+    },
+  },
+
   /** CTA del header. */
   cta: { label: "Hablemos", href: "#contacto" },
 
-  /** Vacíos hasta tener los datos reales: nada apunta a un contacto inventado. */
   contact: {
-    email: "",
-    whatsapp: "",
+    email: "jesus-adrian@yisoft-development.com",
+    /** E.164, como lo pide schema.org. Para mostrarlo: `contacto.error.telefonoVisible`. */
+    whatsapp: "+528186580644",
   },
 
   ogImage: `${SITE_URL}/opengraph-image`,

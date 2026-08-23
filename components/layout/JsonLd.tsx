@@ -46,6 +46,20 @@ const professionalService = {
   },
   // Solo se publica el contacto cuando existe: un `email: ""` es dato inválido.
   ...(site.contact.email ? { email: site.contact.email } : {}),
+  /* Punto de contacto de la sección "Hablemos". SIN `hoursAvailable`: no hay
+     horario de atención publicado y declarar uno inventado es peor que
+     omitirlo, porque Google lo muestra como si fuera un compromiso. */
+  ...(site.contact.email && site.contact.whatsapp
+    ? {
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          email: site.contact.email,
+          telephone: site.contact.whatsapp,
+          availableLanguage: site.lang,
+        },
+      }
+    : {}),
   inLanguage: site.lang,
 };
 
