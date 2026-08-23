@@ -563,7 +563,7 @@ export const site = {
     titulo: "Hablemos",
     subtitulo:
       "Cuéntanos qué está pasando en tu operación. La primera plática es sin costo y sin compromiso.",
-    expectativa: "Te respondemos en menos de un día hábil.",
+    expectativa: "Te respondemos a la brevedad.",
 
     directo: {
       titulo: "¿Prefieres escribir directo?",
@@ -612,7 +612,7 @@ export const site = {
     exito: {
       titulo: "Mensaje recibido",
       texto:
-        "Gracias, {nombre}. Te respondemos en menos de un día hábil. Si es urgente, escríbenos por WhatsApp.",
+        "Gracias, {nombre}. Te respondemos a la brevedad. Si es urgente, escríbenos por WhatsApp.",
     },
 
     error: {
