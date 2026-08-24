@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/cn";
 import { irASeccion } from "@/lib/navegacion";
@@ -14,7 +15,16 @@ import MagneticButton from "@/components/ui/MagneticButton";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import NavLink from "@/components/layout/NavLink";
 import Hamburger from "@/components/layout/Hamburger";
-import MobileMenu from "@/components/layout/MobileMenu";
+
+/**
+ * Solo se usa al abrir el menú móvil (interacción, nunca contenido crítico:
+ * los mismos enlaces ya están en el <nav> de escritorio, presentes en el HTML
+ * aunque estén ocultos por CSS bajo 1024px). `ssr: false` es válido aquí
+ * porque Header ya es un Client Component.
+ */
+const MobileMenu = dynamic(() => import("@/components/layout/MobileMenu"), {
+  ssr: false,
+});
 
 /** Umbrales de comportamiento del header, en px. */
 const UMBRAL_SOLIDO = 24;

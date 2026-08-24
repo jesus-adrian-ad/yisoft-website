@@ -1,10 +1,7 @@
-import { site } from "@/lib/site";
+import { site, ID_TITULO_PROBLEMA } from "@/lib/site";
 import Container from "@/components/ui/Container";
 import { RevelarAlScroll, RevelarGrupo } from "@/components/ui/RevelarAlScroll";
 import CarrilEscenas from "@/components/sections/CarrilEscenas";
-
-/** Id del h2. Lo usa el `aria-labelledby` de la <section> en page.tsx. */
-export const ID_TITULO_PROBLEMA = "problema-titulo";
 
 /**
  * "El problema". Título fijo a la izquierda, escenas desfilando a la derecha.

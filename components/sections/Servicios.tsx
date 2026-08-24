@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { site } from "@/lib/site";
+import { site, ID_TITULO_SERVICIOS } from "@/lib/site";
 import Container from "@/components/ui/Container";
 import { RevelarAlScroll, RevelarGrupo } from "@/components/ui/RevelarAlScroll";
 import MockSistema from "@/components/mockups/MockSistema";
@@ -7,9 +7,6 @@ import MockAutomatizacion from "@/components/mockups/MockAutomatizacion";
 import MockLanding from "@/components/mockups/MockLanding";
 import MockIntegraciones from "@/components/mockups/MockIntegraciones";
 import MockEcommerce from "@/components/mockups/MockEcommerce";
-
-/** Id del h2. Lo usa el `aria-labelledby` de la <section> en page.tsx. */
-export const ID_TITULO_SERVICIOS = "servicios-titulo";
 
 /**
  * La maqueta de cada servicio, en el orden de `site.servicios.items`. Vive
