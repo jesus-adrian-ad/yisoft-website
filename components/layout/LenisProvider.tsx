@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import Lenis from "lenis";
+import type Lenis from "lenis";
 
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
@@ -31,6 +31,12 @@ export function useLenis(): Lenis | null {
  * - Intercepta los enlaces ancla sueltos del documento (los del nav los
  *   maneja el propio Header, que sabe cuánto mide).
  * - Se limpia por completo en el unmount.
+ *
+ * La librería (~17 KB) se importa dinámicamente y la instancia se crea recién
+ * en el primer rato ocioso tras el paint: no es crítica para el primer
+ * render, y mientras tanto `useScrollListener` cae solo al scroll nativo del
+ * navegador (ver ese hook), así que el header y la barra de progreso siguen
+ * funcionando en la ventana de espera.
  */
 export function LenisProvider({ children }: { children: ReactNode }) {
   const [lenis, setLenis] = useState<Lenis | null>(null);
@@ -41,9 +47,15 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     let instancia: Lenis | null = null;
     let rafId = 0;
     let onAnchorClick: ((e: MouseEvent) => void) | null = null;
+    let idleId = 0;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let cancelado = false;
 
-    function start() {
-      if (instancia) return;
+    async function start() {
+      if (instancia || cancelado) return;
+
+      const { default: Lenis } = await import("lenis");
+      if (cancelado || instancia) return;
 
       instancia = new Lenis({
         lerp: 0.1,
@@ -94,7 +106,28 @@ export function LenisProvider({ children }: { children: ReactNode }) {
       setLenis(instancia);
     }
 
+    function cancelarEspera() {
+      if (idleId) {
+        window.cancelIdleCallback?.(idleId);
+        idleId = 0;
+      }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = undefined;
+      }
+    }
+
+    /** Deja pasar el primer rato ocioso (o 1.5s como tope) antes de arrancar. */
+    function programar() {
+      if ("requestIdleCallback" in window) {
+        idleId = window.requestIdleCallback(() => void start(), { timeout: 1500 });
+      } else {
+        timeoutId = setTimeout(() => void start(), 200);
+      }
+    }
+
     function stop() {
+      cancelarEspera();
       if (rafId) cancelAnimationFrame(rafId);
       rafId = 0;
       if (onAnchorClick) document.removeEventListener("click", onAnchorClick);
@@ -104,15 +137,16 @@ export function LenisProvider({ children }: { children: ReactNode }) {
       setLenis(null);
     }
 
-    if (!mq.matches) start();
+    if (!mq.matches) programar();
 
     const onPreferenceChange = (e: MediaQueryListEvent) => {
       if (e.matches) stop();
-      else start();
+      else void start();
     };
     mq.addEventListener("change", onPreferenceChange);
 
     return () => {
+      cancelado = true;
       mq.removeEventListener("change", onPreferenceChange);
       stop();
     };

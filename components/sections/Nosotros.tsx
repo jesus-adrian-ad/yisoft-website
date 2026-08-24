@@ -1,10 +1,7 @@
 import type { ReactNode } from "react";
-import { site } from "@/lib/site";
+import { site, ID_TITULO_NOSOTROS } from "@/lib/site";
 import Container from "@/components/ui/Container";
 import { RevelarAlScroll, RevelarGrupo } from "@/components/ui/RevelarAlScroll";
-
-/** Id del h2. Lo usa el `aria-labelledby` de la <section> en page.tsx. */
-export const ID_TITULO_NOSOTROS = "nosotros-titulo";
 
 /**
  * Parte el párrafo en el fragmento a resaltar. Se hace aquí y no guardando el

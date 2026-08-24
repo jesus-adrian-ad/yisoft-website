@@ -1,10 +1,7 @@
-import { site } from "@/lib/site";
+import { site, ID_TITULO_PROCESO } from "@/lib/site";
 import Container from "@/components/ui/Container";
 import { RevelarAlScroll, RevelarGrupo } from "@/components/ui/RevelarAlScroll";
 import CarrilPasos from "@/components/sections/CarrilPasos";
-
-/** Id del h2. Lo usa el `aria-labelledby` de la <section> en page.tsx. */
-export const ID_TITULO_PROCESO = "proceso-titulo";
 
 /**
  * Color de la línea que separa los pasos de la franja de cierre.

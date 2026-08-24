@@ -1,10 +1,7 @@
 import type { ReactNode } from "react";
-import { site } from "@/lib/site";
+import { site, ID_TITULO_SOLUCION } from "@/lib/site";
 import Container from "@/components/ui/Container";
 import { RevelarAlScroll, RevelarGrupo } from "@/components/ui/RevelarAlScroll";
-
-/** Id del h2. Lo usa el `aria-labelledby` de la <section> en page.tsx. */
-export const ID_TITULO_SOLUCION = "solucion-titulo";
 
 /**
  * Color de las líneas divisorias entre pilares.

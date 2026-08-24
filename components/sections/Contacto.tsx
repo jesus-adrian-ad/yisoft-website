@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { site } from "@/lib/site";
+import { site, ID_TITULO_CONTACTO } from "@/lib/site";
 import { track } from "@/lib/track";
 import { enviarContacto } from "@/app/acciones/enviar-contacto";
 import {
@@ -20,9 +20,6 @@ import { RevelarAlScroll, RevelarGrupo } from "@/components/ui/RevelarAlScroll";
 import Button from "@/components/ui/Button";
 import Campo from "@/components/ui/Campo";
 import CorreoCopiable from "@/components/ui/CorreoCopiable";
-
-/** Id del h2. Lo usa el `aria-labelledby` de la <section> en page.tsx. */
-export const ID_TITULO_CONTACTO = "contacto-titulo";
 
 const { contacto, contact } = site;
 

@@ -1,11 +1,29 @@
-import { sections } from "@/lib/site";
+import dynamic from "next/dynamic";
+import {
+  sections,
+  ID_TITULO_NOSOTROS,
+  ID_TITULO_PROBLEMA,
+  ID_TITULO_SOLUCION,
+  ID_TITULO_SERVICIOS,
+  ID_TITULO_PROCESO,
+  ID_TITULO_CONTACTO,
+} from "@/lib/site";
 import Hero from "@/components/sections/Hero";
-import Nosotros, { ID_TITULO_NOSOTROS } from "@/components/sections/Nosotros";
-import Problema, { ID_TITULO_PROBLEMA } from "@/components/sections/Problema";
-import Solucion, { ID_TITULO_SOLUCION } from "@/components/sections/Solucion";
-import Servicios, { ID_TITULO_SERVICIOS } from "@/components/sections/Servicios";
-import Proceso, { ID_TITULO_PROCESO } from "@/components/sections/Proceso";
-import Contacto, { ID_TITULO_CONTACTO } from "@/components/sections/Contacto";
+
+/**
+ * Todo lo de abajo del Hero entra con `next/dynamic` (SSR sigue encendido:
+ * el HTML/texto de cada sección viaja igual en la respuesta del servidor,
+ * solo cambia que su JS —incluyendo el código de Motion que usan a través de
+ * RevelarAlScroll— vive en un chunk aparte del bundle inicial en vez de ir
+ * mezclado con el de Hero. Hero se queda con import estático a propósito: es
+ * la única sección crítica para el primer render.
+ */
+const Nosotros = dynamic(() => import("@/components/sections/Nosotros"));
+const Problema = dynamic(() => import("@/components/sections/Problema"));
+const Solucion = dynamic(() => import("@/components/sections/Solucion"));
+const Servicios = dynamic(() => import("@/components/sections/Servicios"));
+const Proceso = dynamic(() => import("@/components/sections/Proceso"));
+const Contacto = dynamic(() => import("@/components/sections/Contacto"));
 
 /**
  * Esqueleto de la landing. Cada <section id> queda lista para recibir su

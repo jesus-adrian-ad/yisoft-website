@@ -684,4 +684,18 @@ export const sections = [
   { id: "contacto", label: "Contacto" },
 ] as const;
 
+/**
+ * Ids de los <h2> de cada sección, para el `aria-labelledby` de su <section>.
+ * Viven aquí y no dentro de cada componente para que page.tsx pueda leerlos
+ * sin arrastrar con un import estático el módulo completo de la sección
+ * (con Motion adentro) al bundle inicial: page.tsx importa la sección con
+ * `next/dynamic`, y este archivo no depende de React ni de Motion.
+ */
+export const ID_TITULO_NOSOTROS = "nosotros-titulo";
+export const ID_TITULO_PROBLEMA = "problema-titulo";
+export const ID_TITULO_SOLUCION = "solucion-titulo";
+export const ID_TITULO_SERVICIOS = "servicios-titulo";
+export const ID_TITULO_PROCESO = "proceso-titulo";
+export const ID_TITULO_CONTACTO = "contacto-titulo";
+
 export type SectionId = (typeof sections)[number]["id"];
