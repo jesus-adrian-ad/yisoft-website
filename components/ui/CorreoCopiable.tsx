@@ -26,10 +26,33 @@ type Props = {
   correo: string;
   /** Para la analítica. Nunca se registra la dirección, solo dónde se hizo clic. */
   ubicacion: string;
+  /**
+   * `auto` sigue el tema de la página, que es lo normal.
+   *
+   * `oscuro` fija los colores de superficie oscura pase lo que pase. Lo usa el
+   * pie, que va sobre carbón en los DOS temas: ahí el azul del tema claro
+   * quedaría en 1.4:1 contra el fondo, es decir, ilegible.
+   */
+  tono?: "auto" | "oscuro";
   className?: string;
 };
 
-export function CorreoCopiable({ correo, ubicacion, className }: Props) {
+/* El color del enlace, por tono. Se declara fuera para que las dos variantes
+   se lean juntas y no haya forma de cambiar una y olvidar la otra. */
+const TONOS = {
+  auto:
+    "text-yi-azul hover-fino:text-yi-verde active:text-yi-verde " +
+    "dark:text-yi-oscuro-titulo dark:hover-fino:text-yi-verde",
+  oscuro:
+    "text-yi-oscuro-titulo hover-fino:text-yi-verde active:text-yi-verde",
+} as const;
+
+export function CorreoCopiable({
+  correo,
+  ubicacion,
+  tono = "auto",
+  className,
+}: Props) {
   const [copiado, setCopiado] = useState(false);
   const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -67,13 +90,14 @@ export function CorreoCopiable({ correo, ubicacion, className }: Props) {
         onClick={alHacerClic}
         /* `break-all` y no `break-words`: la dirección es una sola palabra de
            35 caracteres y sin esto desborda el contenedor a 320px. */
-        className={
-          "break-all font-sans text-body font-semibold text-yi-azul underline decoration-yi-verde " +
-          "decoration-2 underline-offset-4 transition-colors duration-200 " +
-          "hover-fino:text-yi-verde active:text-yi-verde " +
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yi-verde " +
-          "dark:text-yi-oscuro-titulo dark:hover-fino:text-yi-verde"
-        }
+        className={cn(
+          // `py-2.5` no es decorativo: sube el área tocable del enlace por
+          // encima de los 44px sin tocar el tamaño de letra.
+          "break-all py-2.5 font-sans text-body font-semibold underline decoration-yi-verde",
+          "decoration-2 underline-offset-4 transition-colors duration-200",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yi-verde",
+          TONOS[tono],
+        )}
       >
         {correo}
       </a>

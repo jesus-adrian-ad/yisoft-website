@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { site } from "@/lib/site";
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import JsonLd from "@/components/layout/JsonLd";
 import LenisProvider from "@/components/layout/LenisProvider";
 import ScrollProgress from "@/components/layout/ScrollProgress";
@@ -124,6 +125,10 @@ export default function RootLayout({
           <ScrollProgress />
           <Header />
           {children}
+          {/* Fuera del <main> (que lo abre page.tsx): el pie no es contenido
+              principal. Dentro de LenisProvider para que sus anclas las tome
+              el mismo interceptor de scroll suave que el resto del documento. */}
+          <Footer />
         </LenisProvider>
         <Analytics />
         <SpeedInsights />

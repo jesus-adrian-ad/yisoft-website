@@ -516,6 +516,28 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Pie de página: el logo siempre en su variante oscura
+
+   El pie va sobre carbón en los DOS temas —es el único bloque del sitio que no
+   alterna—, así que el lockup no puede seguir al tema de la página: en claro
+   pintaría el "Yi" en azul #1b4965 sobre #101820, que son 1.4:1. Ilegible.
+
+   Se resuelve redefiniendo las tres variables en el propio <footer>. Como son
+   propiedades personalizadas, heredan a todo lo que cuelga de él y ganan sobre
+   las de `:root` sin importar el tema activo, sin JavaScript y sin una segunda
+   copia del SVG.
+--------------------------------------------------------------------------- */
+@layer components {
+  .yi-pie {
+    --logo-mark: #ffffff;
+    --logo-dev: #9fb3bf;
+    /* El acento es el mismo en los dos temas; se repite aquí para que las tres
+       variables del logo se lean juntas y no haya que buscarlas. */
+    --logo-acento: #2ec486;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Campo trampa del formulario de contacto (honeypot)
 
    Fuera de la pantalla, NUNCA con `display: none` ni `visibility: hidden`:
