@@ -193,6 +193,20 @@ type Site = {
       readonly telefonoVisible: string;
     };
   };
+  readonly footer: {
+    /** Dos líneas. La primera es la plaza; la segunda, el alcance. */
+    readonly ubicacion: readonly [string, string];
+    readonly navTitulo: string;
+    readonly contactoTitulo: string;
+    readonly whatsapp: {
+      /** El número, escrito como se lee. El enlace se reutiliza de `contacto`. */
+      readonly label: string;
+      readonly aria: string;
+    };
+    /** `{anio}` se sustituye en el servidor. Ver la nota en Footer.tsx. */
+    readonly copyright: string;
+    readonly aviso: string;
+  };
   readonly nav: readonly { readonly id: string; readonly label: string; readonly href: string }[];
   readonly cta: { readonly label: string; readonly href: string };
   readonly contact: {
@@ -544,6 +558,25 @@ export const site = {
    * Enlaces del nav principal. Los consumen el nav de escritorio, el menú
    * móvil y el scroll-spy.
    */
+  /* -------------------------------------------------------------------------
+     Pie de página.
+
+     Aquí NO se repiten el eslogan ni los enlaces: el pie consume `slogan`,
+     `nav` y `cta`, que ya existen. Lo único que vive en esta clave es el copy
+     que no está en ninguna otra parte.
+  ------------------------------------------------------------------------- */
+  footer: {
+    ubicacion: ["Monterrey, México", "Trabajamos en remoto para todo el país"],
+    navTitulo: "Secciones",
+    contactoTitulo: "Contacto",
+    whatsapp: {
+      label: "81 8658 0644",
+      aria: "Escríbenos por WhatsApp al 81 8658 0644 (abre en una ventana nueva)",
+    },
+    copyright: "© {anio} YiSoft Development. Todos los derechos reservados.",
+    aviso: "Tus datos solo se usan para responderte.",
+  },
+
   nav: [
     { id: "problema", label: "Problema", href: "#problema" },
     { id: "solucion", label: "Solución", href: "#solucion" },
