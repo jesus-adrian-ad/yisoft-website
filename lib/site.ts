@@ -570,8 +570,8 @@ export const site = {
     navTitulo: "Secciones",
     contactoTitulo: "Contacto",
     whatsapp: {
-      label: "81 8658 0644",
-      aria: "Escríbenos por WhatsApp al 81 8658 0644 (abre en una ventana nueva)",
+      label: "81 4984 6477",
+      aria: "Escríbenos por WhatsApp al 81 4984 6477 (abre en una ventana nueva)",
     },
     copyright: "© {anio} YiSoft Development. Todos los derechos reservados.",
     aviso: "Tus datos solo se usan para responderte.",
@@ -602,7 +602,7 @@ export const site = {
       titulo: "¿Prefieres escribir directo?",
       whatsapp: {
         label: "Escríbenos por WhatsApp",
-        href: "https://wa.me/528186580644?text=Hola%2C%20me%20interesa%20trabajar%20con%20YiSoft",
+        href: "https://wa.me/528149846477?text=Hola%2C%20me%20interesa%20trabajar%20con%20YiSoft",
         aria: "Escríbenos por WhatsApp (abre en una ventana nueva)",
       },
       correoPrefijo: "O al correo",
@@ -650,8 +650,8 @@ export const site = {
 
     error: {
       texto:
-        "No pudimos enviar tu mensaje. Escríbenos directo a jesus-adrian@yisoft-development.com o por WhatsApp al 81 8658 0644.",
-      telefonoVisible: "81 8658 0644",
+        "No pudimos enviar tu mensaje. Escríbenos directo a jesus-adrian@yisoft-development.com o por WhatsApp al 81 4984 6477.",
+      telefonoVisible: "81 4984 6477",
     },
   },
 
@@ -661,7 +661,7 @@ export const site = {
   contact: {
     email: "jesus-adrian@yisoft-development.com",
     /** E.164, como lo pide schema.org. Para mostrarlo: `contacto.error.telefonoVisible`. */
-    whatsapp: "+528186580644",
+    whatsapp: "+528149846477",
   },
 
   ogImage: `${SITE_URL}/opengraph-image`,
